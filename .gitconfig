@@ -1,0 +1,11 @@
+[user]
+  name = Tolu Adesegha
+  email = tolu@adesegha.ca
+[alias]
+  s = status
+  d = diff
+  c = commit
+  cm = commit -am
+  co = checkout
+  a = add
+  aa = add -A
