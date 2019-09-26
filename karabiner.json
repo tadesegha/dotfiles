@@ -113,24 +113,6 @@
                   }
                 ],
                 "from": {
-                  "key_code": "equal_sign"
-                },
-                "to": [
-                  {
-                    "key_code": "f12"
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [
-                  {
-                    "name": "navigation_mode",
-                    "type": "variable_if",
-                    "value": 1
-                  }
-                ],
-                "from": {
                   "key_code": "j"
                 },
                 "to": [
@@ -576,6 +558,42 @@
                 "to": [
                   {
                     "key_code": "return_or_enter"
+                  },
+                  {
+                    "set_variable": {
+                      "name": "navigation_mode",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "set_variable": {
+                      "name": "visual_mode",
+                      "value": 0
+                    }
+                  },
+                  {
+                    "set_variable": {
+                      "name": "navigation_or_visual_mode",
+                      "value": 0
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [
+                  {
+                    "name": "navigation_mode",
+                    "type": "variable_if",
+                    "value": 1
+                  }
+                ],
+                "from": {
+                  "key_code": "equal_sign"
+                },
+                "to": [
+                  {
+                    "key_code": "f12"
                   },
                   {
                     "set_variable": {
