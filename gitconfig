@@ -23,5 +23,3 @@
   rh = reset --hard
   rv = revert
   s = status
-[core]
-	autocrlf = true
