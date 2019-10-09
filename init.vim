@@ -13,8 +13,6 @@ call plug#begin()
   Plug 'leafgarland/typescript-vim'
   Plug 'PProvost/vim-ps1'
   Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
-  Plug 'christoomey/vim-tmux-navigator'
-  Plug 'mattn/emmet-vim'
 
   Plug 'tadesegha/vim-csharp'
   Plug 'tadesegha/vim-term'
