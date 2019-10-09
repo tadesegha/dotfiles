@@ -65,7 +65,7 @@ highlight LineNr guifg=#f15d2a
 highlight SpellBad cterm=underline ctermbg=none
 
 " FZF settings
-let $FZF_DEFAULT_COMMAND = 'rg --files --glob !*node_module* --glob !*bin* --glob !*obj* --glob !*build* --glob !*packages*'
+let $FZF_DEFAULT_COMMAND = 'rg --files --glob "!*node_module*" --glob "!*bin*" --glob "!*obj*" --glob "!*build*" --glob "!*packages*"'
 
 " nvim-typescript settings
 let $NVIM_NODE_LOG_FILE = 'c:\users\tolu_adesegha\temp\nvim-node.log'
