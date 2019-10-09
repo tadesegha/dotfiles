@@ -1,6 +1,6 @@
 call plug#begin()
   Plug 'haishanh/night-owl.vim'
-  Plug 'junegunn/fzf'
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   Plug 'sirver/ultisnips'
   Plug 'omnisharp/omnisharp-vim'

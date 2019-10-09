@@ -100,3 +100,5 @@ source $ZSH/oh-my-zsh.sh
 
 # Use vi keys
 set -o vi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
