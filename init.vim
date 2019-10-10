@@ -8,6 +8,7 @@ call plug#begin()
   Plug 'w0rp/ale'
   Plug 'Shougo/deoplete.nvim'
   Plug 'mxw/vim-jsx'
+  Plug 'ianks/vim-tsx'
   Plug 'pangloss/vim-javascript'
   Plug 'tpope/vim-fugitive'
   Plug 'leafgarland/typescript-vim'
