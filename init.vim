@@ -12,7 +12,7 @@ call plug#begin()
   Plug 'tpope/vim-fugitive'
   Plug 'leafgarland/typescript-vim'
   Plug 'PProvost/vim-ps1'
-  Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+  Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 
   Plug 'tadesegha/vim-csharp'
   Plug 'tadesegha/vim-term'
