@@ -60,7 +60,7 @@ nnoremap <c-l> <c-w>l
 
 colorscheme night-owl
 
-highlight LineNr guifg=#f15d2a
+highlight LineNr guifg=#f15d2a ctermfg=white
 highlight SpellBad cterm=underline ctermbg=none
 
 " FZF settings
