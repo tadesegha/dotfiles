@@ -34,7 +34,7 @@ set expandtab
 set shiftwidth=2
 set tabstop=2
 set completeopt=menu,noinsert
-set nowrap
+set wrap
 set nohlsearch
 set cmdheight=2
 set linespace=7
