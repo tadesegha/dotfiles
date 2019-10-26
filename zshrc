@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=/usr/local/Cellar/node@10/10.16.3/bin:$PATH
+export PATH=/usr/local/Cellar/node@10/10.16.3/bin:/Applications/MongoDB.app/Contents/Resources/Vendor/mongodb/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/tadesegha/.oh-my-zsh"
@@ -100,5 +100,8 @@ source $ZSH/oh-my-zsh.sh
 
 # Use vi keys
 set -o vi
+
+# Turn off beeps
+unsetopt BEEP
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

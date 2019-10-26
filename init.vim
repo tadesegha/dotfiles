@@ -110,6 +110,11 @@ augroup json
   autocmd FileType json nnoremap <buffer> <LocalLeader>cf :%!python -m json.tool<cr>
 augroup END
 
+augroup xml
+  autocmd!
+  autocmd FileType xml nnoremap <buffer> <LocalLeader>cf :%!python -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"<cr>
+augroup END
+
 augroup quickfix
   autocmd!
   autocmd FileType qf nnoremap <buffer> q :ccl<cr>
