@@ -58,6 +58,8 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
+inoremap <Leader>guid <esc>:py3 import uuid<cr>a<c-r>=py3eval('str(uuid.uuid1())')<cr>
+
 colorscheme night-owl
 
 highlight LineNr guifg=#f15d2a ctermfg=white
