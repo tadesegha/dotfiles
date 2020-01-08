@@ -1,4 +1,8 @@
 # If you come from bash you might have to change your $PATH.
+alias package-spfx='gulp bundle --ship && gulp package-solution --ship'
+
+export ANDROID_HOME=/Users/tadesegha/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
 export PATH=/usr/local/Cellar/node@10/10.16.3/bin:/Applications/MongoDB.app/Contents/Resources/Vendor/mongodb/bin:$PATH
 
 # Path to your oh-my-zsh installation.
