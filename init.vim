@@ -4,9 +4,23 @@ call plug#begin(stdpath('data') . '/plugged')
     Plug 'neoclide/coc.nvim', { 'branch': 'release'}
 call plug#end()
 
+" fzf settings
+let $FZF_DEFAULT_COMMAND = 'rg --files --glob "!*node_module*" --glob "!*bin*" --glob "!*obj*" --glob "!*build*" --glob "!*packages*"'
+
+" coc settings
+let g:coc_global_extensions = ['coc-tsserver', 'coc-json']
+nmap <localleader>d <Plug>(coc-definition)
+nmap <localleader>i <Plug>(coc-implementation)
+nmap <localleader>u <Plug>(coc-references)
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" neovim settings
+let maplocalleader = ','
+
 set autoindent
 set expandtab
 set hidden
+set ignorecase
 set list
 set listchars=eol:¬,trail:·,tab:»\ 
 set nohlsearch
@@ -20,21 +34,26 @@ set tabstop=4
 set updatetime=300
 set linespace=7
 set splitright
+syntax off
 
-nmap <space> :
-nmap <leader>e :Files<cr>
-nmap <leader>b :Buffers<cr>
-nmap <leader>t :call <SID>GoToShell()<cr>
-nmap <c-l> <c-w><c-l>
 nmap <c-h> <c-w><c-h>
-nmap <c-k> <c-w><c-k>
 nmap <c-j> <c-w><c-j>
+nmap <c-k> <c-w><c-k>
+nmap <c-l> <c-w><c-l>
+nmap <leader><leader> <c-^>
+nmap <leader>b :Buffers<cr>
+nmap <leader>e :Files<cr>
+nmap <leader>t :call <SID>GoToShell()<cr>
+nmap <space> :
 tnoremap <leader><leader> <c-\><c-n>
 
 function! s:GoToShell()
     if bufexists('shell')
-        :buffers shell
+        buffer shell
+        startinsert
     else
-        echo 'buffer does not exist'
+        terminal
+        file shell
+        startinsert
     endif
 endfunction

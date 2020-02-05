@@ -4,6 +4,7 @@ alias package-spfx='gulp bundle --ship && gulp package-solution --ship'
 export ANDROID_HOME=/Users/tlo/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
 export PATH=/usr/local/opt/node@10/bin:/Applications/MongoDB.app/Contents/Resources/Vendor/mongodb/bin:$PATH
+export PATH=/Users/tlo/Library/Python/3.7/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/tlo/.oh-my-zsh"
