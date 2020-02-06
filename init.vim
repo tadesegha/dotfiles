@@ -12,6 +12,8 @@ let g:coc_global_extensions = ['coc-tsserver', 'coc-json']
 nmap <localleader>d <Plug>(coc-definition)
 nmap <localleader>i <Plug>(coc-implementation)
 nmap <localleader>u <Plug>(coc-references)
+nmap <localleader>n <Plug>(coc-diagnostic-next)
+nmap <localleader>p <Plug>(coc-diagnostic-previous)
 inoremap <silent><expr> <c-space> coc#refresh()
 
 " neovim settings
