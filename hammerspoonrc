@@ -24,16 +24,16 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Right", function()
   win:setFrame(f)
 end)
 
-function reloadConfig(files)
-    doReload = false
-    for _,file in pairs(files) do
-        if file:sub(-4) == ".lua" then
-            doReload = true
-        end
-    end
-    if doReload then
-        hs.reload()
-    end
-end
-myWatcher = hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "r", function()
+	hs.reload()
+	hs.alert.show("Config loaded")
+end)
+
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "c", function()
+	hs.application.launchOrFocus("Google Chrome")
+	local chrome = hs.appfinder.appFromName("Google Chrome")
+	local devConsole = { "View", "Developer", "JavaScript Console" }
+	chrome:selectMenuItem(devConsole)
+end)
+
 hs.alert.show("Config loaded")
