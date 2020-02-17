@@ -29,15 +29,10 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "r", function()
 	hs.alert.show("Config loaded")
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "c", function()
-	hs.application.launchOrFocus("Google Chrome")
-	local chrome = hs.appfinder.appFromName("Google Chrome")
-	local devConsole = { "View", "Developer", "JavaScript Console" }
-	chrome:selectMenuItem(devConsole)
-end)
-
 hs.window.filter.new('Google Chrome')
 	:subscribe(hs.window.filter.windowFocused, function()
+		if chromeModal then return end
+
 		chromeModal = hs.hotkey.modal.new("", ",")
 
 		chromeModal:bind('', 'c', function()
