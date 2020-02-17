@@ -32,6 +32,8 @@ set linespace=7
 set splitright
 syntax off
 
+highlight PMenu ctermbg=black ctermfg=white
+
 nmap <c-h> <c-w><c-h>
 nmap <c-j> <c-w><c-j>
 nmap <c-k> <c-w><c-k>
@@ -53,6 +55,10 @@ nmap <localleader>p <Plug>(coc-diagnostic-previous)
 nmap <localleader>a :CocAction<cr>
 nmap <localleader>f :call CocAction('format')<cr>
 inoremap <silent><expr> <c-space> coc#refresh()
+
+augroup Coc
+	autocmd BufWritePre *.js,*.jsx,*.tsx,*.ts :call CocAction('format')
+augroup end
 
 function! s:GoToShell()
     if bufexists('shell')
