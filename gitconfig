@@ -1,6 +1,7 @@
 [user]
   name = Tolu Adesegha
   email = tolu@adesegha.ca
+  editor = nvim
 [alias]
   a = add
   aa = add -A

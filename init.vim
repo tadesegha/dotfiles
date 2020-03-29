@@ -15,6 +15,7 @@ let $FZF_DEFAULT_COMMAND = 'rg --files --glob "!*node_module*" --glob "!*bin*" -
 let maplocalleader = ','
 
 set autoindent
+set noexpandtab
 set hidden
 set ignorecase
 set list
@@ -23,10 +24,10 @@ set nohlsearch
 set noswapfile
 set number
 set relativenumber
-set shiftwidth=4
+set shiftwidth=2
 set smartcase
 set smartindent
-set tabstop=4
+set tabstop=2
 set updatetime=300
 set linespace=7
 set splitright
@@ -52,6 +53,7 @@ nmap <localleader>i <Plug>(coc-implementation)
 nmap <localleader>u <Plug>(coc-references)
 nmap <localleader>n <Plug>(coc-diagnostic-next)
 nmap <localleader>p <Plug>(coc-diagnostic-previous)
+nmap <localleader>r <Plug>(coc-rename)
 nmap <localleader>a :CocAction<cr>
 nmap <localleader>f :call CocAction('format')<cr>
 inoremap <silent><expr> <c-space> coc#refresh()
