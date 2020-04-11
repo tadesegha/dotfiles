@@ -1,4 +1,4 @@
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Left", function()
+hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'Left', function()
   local win = hs.window.focusedWindow()
   local f = win:frame()
   local screen = win:screen()
@@ -11,7 +11,7 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Left", function()
   win:setFrame(f)
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Right", function()
+hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'Right', function()
   local win = hs.window.focusedWindow()
   local f = win:frame()
   local screen = win:screen()
@@ -24,34 +24,64 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Right", function()
   win:setFrame(f)
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "r", function()
+hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'r', function()
 	hs.reload()
-	hs.alert.show("Config loaded")
+	hs.alert.show('Config loaded')
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "c", function()
-	local chrome = hs.appfinder.appFromName("Google Chrome")
-	local devConsole = { "View", "Developer", "JavaScript Console" }
+hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'c', function()
+	local chrome = hs.appfinder.appFromName('Google Chrome')
+	local devConsole = { 'View', 'Developer', 'JavaScript Console' }
 	chrome:selectMenuItem(devConsole)
 end)
 
---[[
 hs.window.filter.new('Google Chrome')
 	:subscribe(hs.window.filter.windowFocused, function()
-		chromeModal = hs.hotkey.modal.new("", ",")
+		if chromeModal then
+			return true
+		end
+
+		chromeModal = hs.hotkey.modal.new('', ',')
 
 		chromeModal:bind('', 'c', function()
 			chromeModal:exit()
-			local chrome = hs.appfinder.appFromName("Google Chrome")
-			local devConsole = { "View", "Developer", "JavaScript Console" }
+			local chrome = hs.appfinder.appFromName('Google Chrome')
+			local devConsole = { 'View', 'Developer', 'JavaScript Console' }
 			chrome:selectMenuItem(devConsole)
 		end)
 
 		chromeModal:bind('', 'p', function()
 			chromeModal:exit()
-			local chrome = hs.appfinder.appFromName("Google Chrome")
-			local people = { "People" }
-			chrome:selectMenuItem(people)
+
+			function deleteModalBindings()
+				for i, binding in ipairs(chromeModalBindings) do binding:delete() end
+			end
+
+			function selectChromeMenu(option)
+				hs.appfinder.appFromName('Google Chrome'):selectMenuItem(option)
+			end
+
+			chromeModalBindings = {
+				hs.hotkey.bind('', 'a', function()
+					deleteModalBindings()
+					selectChromeMenu({'People', 'Nutrien Admin'})
+				end),
+
+				hs.hotkey.bind('', 'd', function()
+					deleteModalBindings()
+					selectChromeMenu({'People', 'Nutrien Dev'})
+				end),
+
+				hs.hotkey.bind('', 'n', function()
+					deleteModalBindings()
+					selectChromeMenu({'People', 'Nutrien'})
+				end),
+
+				hs.hotkey.bind('', 't', function()
+					deleteModalBindings()
+					selectChromeMenu({'People', 'T-Lo'})
+				end)
+			}
 		end)
 
 		chromeModal:bind('', 'escape', function()
@@ -60,7 +90,7 @@ hs.window.filter.new('Google Chrome')
 	end)
 	:subscribe(hs.window.filter.windowUnfocused, function()
 		chromeModal:delete()
+		chromeModal = nil
 	end)
---]]
 
-hs.alert.show("Config loaded")
+hs.alert.show('Config loaded')
