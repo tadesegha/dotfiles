@@ -1,13 +1,7 @@
-# If you come from bash you might have to change your $PATH.
-alias package-spfx='gulp bundle --ship && gulp package-solution --ship'
-
-export ANDROID_HOME=/Users/tlo/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
-export PATH=/usr/local/opt/node@10/bin:/Applications/MongoDB.app/Contents/Resources/Vendor/mongodb/bin:$PATH
-export PATH=/Users/tlo/Library/Python/3.7/bin:$PATH
-
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/tlo/.oh-my-zsh"
+
+# Default settings
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -103,10 +97,24 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+alias package-spfx='gulp bundle --ship && gulp package-solution --ship'
+
+# Functions
+pswd() { lpass show --password --clip $1 }
+
 # Use vi keys
 set -o vi
 
+# Use nvim as default editor
+export EDITOR=nvim
+
 # Turn off beeps
 unsetopt BEEP
+
+# If you come from bash you might have to change your $PATH.
+export ANDROID_HOME=/Users/tlo/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
+export PATH=/usr/local/opt/node@10/bin:/Applications/MongoDB.app/Contents/Resources/Vendor/mongodb/bin:$PATH
+export PATH=/Users/tlo/Library/Python/3.7/bin:$PATH
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
