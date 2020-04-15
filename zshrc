@@ -100,9 +100,9 @@ source $ZSH/oh-my-zsh.sh
 alias package-spfx='gulp bundle --ship && gulp package-solution --ship'
 
 # Functions
-pswd() {
+creds() {
   id=$(cat ~/.secrets/pswds | grep "$1 " | cut -d ' ' -f 2)
-  lpass show --password --clip $id
+  lpass show --$2 --clip $id
 }
 
 # Use vi keys
