@@ -56,6 +56,10 @@ hs.window.filter.new('Google Chrome')
 			end
 
 			chromeModalBindings = {
+				hs.hotkey.bind('', 'escape', function()
+					deleteModalBindings()
+				end),
+
 				hs.hotkey.bind('', 'a', function()
 					deleteModalBindings()
 					selectChromeMenu({'People', 'Nutrien Admin'})
