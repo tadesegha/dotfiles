@@ -101,7 +101,8 @@ alias package-spfx='gulp bundle --ship && gulp package-solution --ship'
 
 # Functions
 pswd() {
-  lpass ls | grep $1 | cut -d ' ' -f 3 | cut -d ']' -f 1 | xargs lpass show --password --clip
+  id=$(cat ~/.secrets/pswds | grep "$1 " | cut -d ' ' -f 2)
+  lpass show --password --clip $id
 }
 
 # Use vi keys
