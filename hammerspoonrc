@@ -31,17 +31,14 @@ end)
 
 hs.window.filter.new('Google Chrome')
 	:subscribe(hs.window.filter.windowFocused, function()
-		if chromeModal then
-			return true
-		end
+		if chromeModal then return true end
 
 		chromeModal = hs.hotkey.modal.new('ctrl', 'space')
 
 		chromeModal:bind('', 'c', function()
 			chromeModal:exit()
 			local chrome = hs.appfinder.appFromName('Google Chrome')
-			local devConsole = { 'View', 'Developer', 'JavaScript Console' }
-			chrome:selectMenuItem(devConsole)
+			chrome:selectMenuItem({ 'View', 'Developer', 'JavaScript Console' })
 		end)
 
 		chromeModal:bind('', 'p', function()
@@ -89,6 +86,36 @@ hs.window.filter.new('Google Chrome')
 	:subscribe(hs.window.filter.windowUnfocused, function()
 		chromeModal:delete()
 		chromeModal = nil
+	end)
+
+hs.window.filter.new('Mail')
+	:subscribe(hs.window.filter.windowFocused, function()
+		if mailModal then return true end
+
+		mailHotkeys = {
+			hs.hotkey.bind('cmd', 'return', function()
+				mail:selectMenuItem({'Message', 'Send'})
+			end)
+		}
+
+		mailModal = hs.hotkey.modal.new('ctrl', 'space')
+		mail = hs.appfinder.appFromName('Mail')
+
+		mailModal:bind('', 'a', function()
+			mailModal:exit()
+			mail:selectMenuItem({'Message', 'Archive'})
+		end)
+
+		mailModal:bind('', 'escape', function()
+			mailModal:exit()
+		end)
+	end)
+	:subscribe(hs.window.filter.windowUnfocused, function()
+		mailModal:delete()
+		mailModal = nil
+		mail = nil
+
+		for i, hotkey in ipairs(mailHotkeys) do hotkey:delete() end
 	end)
 
 hs.alert.show('Config loaded')
