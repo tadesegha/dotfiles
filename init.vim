@@ -1,11 +1,11 @@
 " help ctrl-w
-" |CTRL-W__|	CTRL-W _	   set current window height to N (default: very
+" |CTRL-W__|  CTRL-W _	 set current window height to N (default: very
 " high)
 
 call plug#begin(stdpath('data') . '/plugged')
-    Plug 'junegunn/fzf'
-    Plug 'junegunn/fzf.vim'
-    Plug 'neoclide/coc.nvim', { 'branch': 'release'}
+	Plug 'junegunn/fzf'
+	Plug 'junegunn/fzf.vim'
+	Plug 'neoclide/coc.nvim', { 'branch': 'release'}
 call plug#end()
 
 " fzf settings
@@ -59,16 +59,45 @@ nmap <localleader>f :call CocAction('format')<cr>
 inoremap <silent><expr> <c-space> coc#refresh()
 
 augroup Coc
-	autocmd BufWritePre *.js,*.jsx,*.tsx,*.ts :call CocAction('format')
+  autocmd!
+  " autocmd BufWritePre *.js,*.jsx,*.tsx,*.ts :call CocAction('format')
+  autocmd BufEnter *.js,*.jsx,*.tsx,*.ts :call s:TabsAndSpaces()
 augroup end
 
 function! s:GoToShell()
-    if bufexists('shell')
-        buffer shell
-        startinsert
-    else
-        terminal
-        file shell
-        startinsert
-    endif
+	if bufexists('shell')
+		buffer shell
+		startinsert
+	else
+		terminal
+		file shell
+		startinsert
+	endif
+endfunction
+
+function! s:TabsAndSpaces()
+	if exists("b:spacing")
+		return
+	endif
+
+	let b:spacing = ''
+	let lines = getline(1, '$')
+
+	for line in lines
+		if match(line, "^\t[^\t]") != -1
+			let b:spacing = 'tabs'
+		elseif (match(line, "^  [^ ]") != -1) && (b:spacing != 'tabs')
+			let b:spacing = 'two spaces'
+		elseif (match(line, "^	[^ ]") != -1) && (b:spacing != 'tabs') && (b:spacing == '')
+			let b:spacing = 'four spaces'
+		endif
+	endfor
+
+	if b:spacing == 'tabs'
+		execute 'setlocal noexpandtab'
+	elseif b:spacing == 'two spaces'
+		execute 'setlocal tabstop=2 shiftwidth=2 expandtab'
+	elseif b:spacing == 'four spaces'
+		execute 'setlocal tabstop=4 shiftwidth=4 expandtab'
+	endif
 endfunction
