@@ -135,7 +135,7 @@ hs.window.filter.new('iTerm2')
 
 			local chrome = hs.appfinder.appFromName('Google Chrome')
 			chrome:activate()
-			chrome:selectMenuItem({'View', 'Reload This Page'})
+			hs.eventtap.keyStroke("cmd", "r")
 
 			iTerm2:activate()
 		end)
