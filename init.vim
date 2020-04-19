@@ -60,8 +60,8 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 augroup Coc
   autocmd!
-  " autocmd BufWritePre *.js,*.jsx,*.tsx,*.ts :call CocAction('format')
-  autocmd BufEnter *.js,*.jsx,*.tsx,*.ts :call s:TabsAndSpaces()
+  autocmd BufWritePre *.js,*.jsx,*.tsx,*.ts,*.html :call CocAction('format')
+  autocmd BufEnter *.js,*.jsx,*.tsx,*.ts,*.html :call s:TabsAndSpaces()
 augroup end
 
 function! s:GoToShell()
