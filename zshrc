@@ -119,5 +119,6 @@ export ANDROID_HOME=/Users/tlo/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools
 export PATH=/usr/local/opt/node@10/bin:/Applications/MongoDB.app/Contents/Resources/Vendor/mongodb/bin:$PATH
 export PATH=/Users/tlo/Library/Python/3.7/bin:$PATH
+export PATH=/usr/local/octave/3.8.0/bin:$PATH
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

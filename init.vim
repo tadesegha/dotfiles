@@ -60,7 +60,7 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 augroup Coc
   autocmd!
-  autocmd BufWritePre *.js,*.jsx,*.tsx,*.ts,*.html :call CocAction('format')
+  " autocmd BufWritePre *.js,*.jsx,*.tsx,*.ts,*.html :call CocAction('format')
   autocmd BufEnter *.js,*.jsx,*.tsx,*.ts,*.html :call s:TabsAndSpaces()
 augroup end
 
@@ -88,7 +88,7 @@ function! s:TabsAndSpaces()
 			let b:spacing = 'tabs'
 		elseif (match(line, "^  [^ ]") != -1) && (b:spacing != 'tabs')
 			let b:spacing = 'two spaces'
-		elseif (match(line, "^	[^ ]") != -1) && (b:spacing != 'tabs') && (b:spacing == '')
+		elseif (match(line, "^    [^ ]") != -1) && (b:spacing != 'tabs') && (b:spacing == '')
 			let b:spacing = 'four spaces'
 		endif
 	endfor

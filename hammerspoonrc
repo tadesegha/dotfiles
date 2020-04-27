@@ -118,6 +118,28 @@ hs.window.filter.new('Mail')
 		for i, hotkey in ipairs(mailHotkeys) do hotkey:delete() end
 	end)
 
+hs.window.filter.new('Microsoft Outlook')
+	:subscribe(hs.window.filter.windowFocused, function()
+		if outlookModal then return true end
+
+		outlookModal = hs.hotkey.modal.new('ctrl', 'space')
+		outlook = hs.appfinder.appFromName('Microsoft Outlook')
+
+		outlookModal:bind('', 'l', function()
+			outlookModal:exit()
+			outlook:selectMenuItem({'Draft', 'Send Later...'})
+		end)
+
+		outlookModal:bind('', 'escape', function()
+			outlookModal:exit()
+		end)
+	end)
+	:subscribe(hs.window.filter.windowUnfocused, function()
+		outlookModal:delete()
+		outlookModal = nil
+		outlook = nil
+	end)
+
 hs.window.filter.new('iTerm2')
 	:subscribe(hs.window.filter.windowFocused, function()
 		if iTerm2Modal then return true end
