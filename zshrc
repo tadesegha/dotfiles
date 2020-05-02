@@ -101,7 +101,7 @@ alias package-spfx='gulp bundle --ship && gulp package-solution --ship'
 
 # Functions
 creds() {
-  id=$(cat ~/.secrets/pswds | grep "$1 " | cut -d ' ' -f 2)
+  id=$(cat '/Volumes/Data/onedrive - adesegha/.accounts' | grep "$1 " | cut -d ' ' -f 2)
   lpass show --$2 --clip $id
 }
 
