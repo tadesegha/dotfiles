@@ -18,7 +18,7 @@ set autoindent
 set noexpandtab
 set hidden
 set ignorecase
-set list
+" set list
 set listchars=eol:¬,trail:·,tab:»\ 
 set nohlsearch
 set noswapfile
@@ -47,7 +47,7 @@ nmap <space> :
 tnoremap <leader><leader> <c-\><c-n>
 
 " coc settings
-let g:coc_global_extensions = ['coc-tsserver', 'coc-json']
+let g:coc_global_extensions = ['coc-tsserver', 'coc-json', 'coc-html']
 nmap <localleader>d <Plug>(coc-definition)
 nmap <localleader>i <Plug>(coc-implementation)
 nmap <localleader>u <Plug>(coc-references)
