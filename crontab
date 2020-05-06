@@ -1,1 +1,1 @@
-10-59/15 * * * * osascript -e 'display notification "drink some water" with title "Health Tips"'
+10-59/15 * * * * /usr/local/bin/hs -c "hs.alert.show('drink some water')"

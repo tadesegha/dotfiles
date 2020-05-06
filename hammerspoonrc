@@ -151,4 +151,5 @@ hs.window.filter.new('iTerm2')
 		end
 	end)
 
+hs.ipc.cliInstall()
 hs.alert.show('Config loaded')
