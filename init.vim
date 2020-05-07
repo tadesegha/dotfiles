@@ -109,8 +109,8 @@ endfunction
 
 function! s:AlternateFile()
 	if match(&filetype, "javascript") == 0 && filereadable(expand('%:r') . '.scss')
-		execute 'nmap <buffer> <localleader><localleader> :buffer ' . expand('%:r') . '.scss<cr>'
+		execute 'nmap <buffer> <localleader><localleader> :edit ' . expand('%:r') . '.scss<cr>'
 	elseif match(&filetype, "scss") == 0 && filereadable(expand('%:r') . '.js')
-		execute 'nmap <buffer> <localleader><localleader> :buffer ' . expand('%:r') . '.js<cr>'
+		execute 'nmap <buffer> <localleader><localleader> :edit ' . expand('%:r') . '.js<cr>'
 	endif
 endfunction
