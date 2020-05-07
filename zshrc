@@ -98,6 +98,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias package-spfx='gulp bundle --ship && gulp package-solution --ship'
+alias data='/Volumes/Data'
 
 # Functions
 creds() {

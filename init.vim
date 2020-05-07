@@ -64,6 +64,11 @@ augroup Coc
   autocmd BufEnter *.js,*.jsx,*.tsx,*.ts,*.html :call s:TabsAndSpaces()
 augroup end
 
+augroup TloCustom
+	autocmd!
+	autocmd BufEnter *.js,*.scss :call s:AlternateFile()
+augroup end
+
 function! s:GoToShell()
 	if bufexists('shell')
 		buffer shell
@@ -99,5 +104,13 @@ function! s:TabsAndSpaces()
 		execute 'setlocal tabstop=2 shiftwidth=2 expandtab'
 	elseif b:spacing == 'four spaces'
 		execute 'setlocal tabstop=4 shiftwidth=4 expandtab'
+	endif
+endfunction
+
+function! s:AlternateFile()
+	if match(&filetype, "javascript") == 0 && filereadable(expand('%:r') . '.scss')
+		execute 'nmap <buffer> <localleader><localleader> :buffer ' . expand('%:r') . '.scss<cr>'
+	elseif match(&filetype, "scss") == 0 && filereadable(expand('%:r') . '.js')
+		execute 'nmap <buffer> <localleader><localleader> :buffer ' . expand('%:r') . '.js<cr>'
 	endif
 endfunction

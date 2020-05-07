@@ -19,24 +19,6 @@
                         "description": "Vim-like Navigation while using a mac keyboard",
                         "manipulators": [
                             {
-                                "from": {
-                                    "simultaneous": [
-                                        {
-                                            "key_code": "left_control"
-                                        },
-                                        {
-                                            "key_code": "left_shift"
-                                        }
-                                    ]
-                                },
-                                "to": [
-                                    {
-                                        "shell_command": "'/Library/Application Support/org.pqrs/Karabiner-Elements/bin/karabiner_cli' --select-profile none"
-                                    }
-                                ],
-                                "type": "basic"
-                            },
-                            {
                                 "conditions": [
                                     {
                                         "name": "navigation_mode",

@@ -3,6 +3,24 @@ hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'r', function()
 	hs.alert.show('Config loaded')
 end)
 
+globalModal = hs.hotkey.modal.new({'ctrl', 'shift'}, 'space')
+
+globalModal:bind('', 'space', function()
+	globalModal:exit()
+
+	local iTerm = hs.appfinder.appFromName('iTerm2')
+	iTerm:selectMenuItem({'Shell', 'New Window'})
+	hs.eventtap.keyStrokes('creds freedom password')
+	hs.eventtap.keyStroke('', 'return')
+	hs.timer.delayed.new(1, function()
+		iTerm:selectMenuItem({'Shell', 'Close'})
+	end):start()
+end)
+
+globalModal:bind('', 'escape', function()
+	globalModal:exit()
+end)
+
 hs.window.filter.new('Google Chrome')
 	:subscribe(hs.window.filter.windowFocused, function()
 		if chromeModal then return true end
