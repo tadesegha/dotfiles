@@ -4,13 +4,23 @@ hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'r', function()
 end)
 
 hs.hotkey.bind('ctrl', 'space', function()
-	local currentWindow = hs.window.frontmostWindow();
 	hs.focus()
 	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "what can I do you for?")
 
-	if response == 'webdev' then setUpForWebDev(currentWindow) end
-	currentWindow:focus()
+	local commands = {
+		webdev = setUpForWebDev,
+		ch = function() launch('Google Chrome') end,
+		t = function() launch('Alacritty') end
+	}
+
+	for key, value in pairs(commands) do
+		if response == key then value() end
+	end
 end)
+
+function launch(application)
+	hs.application.launchOrFocus(application)
+end
 
 function isExpectedScreen() return screen ~= 'LG Ultra HD' end
 
