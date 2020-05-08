@@ -66,7 +66,8 @@ augroup end
 
 augroup TloCustom
 	autocmd!
-	autocmd BufEnter *.js,*.scss :call s:AlternateFile()
+	autocmd BufEnter *.js,*.tsx :call s:InitStylesFile()
+	autocmd BufEnter *.scss :call s:InitCodeFile()
 augroup end
 
 function! s:GoToShell()
@@ -107,10 +108,16 @@ function! s:TabsAndSpaces()
 	endif
 endfunction
 
-function! s:AlternateFile()
-	if match(&filetype, "javascript") == 0 && filereadable(expand('%:r') . '.scss')
+function! s:InitStylesFile()
+	if filereadable(expand('%:r') . '.scss')
 		execute 'nmap <buffer> <localleader><localleader> :edit ' . expand('%:r') . '.scss<cr>'
-	elseif match(&filetype, "scss") == 0 && filereadable(expand('%:r') . '.js')
+	endif
+endfunction
+
+function! s:InitCodeFile()
+	if filereadable(expand('%:r') . '.js')
 		execute 'nmap <buffer> <localleader><localleader> :edit ' . expand('%:r') . '.js<cr>'
+	elseif filereadable(expand('%:r') . '.tsx')
+		execute 'nmap <buffer> <localleader><localleader> :edit ' . expand('%:r') . '.tsx<cr>'
 	endif
 endfunction
