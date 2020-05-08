@@ -99,6 +99,7 @@ source $ZSH/oh-my-zsh.sh
 
 alias package-spfx='gulp bundle --ship && gulp package-solution --ship'
 alias data='/Volumes/Data'
+alias dotfiles='/Volumes/Data/dotfiles'
 
 # Functions
 creds() {
