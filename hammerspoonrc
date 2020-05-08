@@ -8,29 +8,50 @@ hs.hotkey.bind('ctrl', 'space', function()
 	hs.focus()
 	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "what can I do you for?")
 
-	if response == 'web dev' then setUpForWebDev() end
+	if response == 'webdev' then setUpForWebDev(currentWindow) end
 	currentWindow:focus()
 end)
 
+function isExpectedScreen() return screen ~= 'LG Ultra HD' end
+
+function waitingForWindow(title, func)
+	if hs.window.find(title) then return end
+	hs.timer.delayed.new(0.5, func):start()
+	return true
+end
+
+function applyWebDevLayout()
+	hs.layout.apply({
+		{"Alacritty", nil, screen, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
+		{"Google Chrome", nil, screen, {x = 0, y = 0, w = 0.5, h = 0.75}, nil, nil}
+	})
+
+	hs.window.find('DevTools'):moveToUnit('[0, 75, 50, 100]')
+end
+
 function setUpForWebDev()
 	local screen = hs.screen.allScreens()[1]:name()
-	if screen ~= 'LG Ultra HD' then
+	if not isExpectedScreen() then
 		hs.dialog.blockAlert("hammerspoon", "I'm not sure how to set up on this display")
 		return true
 	end
 
-	local layout = {
-		{"Alacritty", nil, screen, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
-		{"Google Chrome", nil, screen, {x = 0, y = 0, w = 0.5, h = 1}, nil, nil},
-	}
-	hs.layout.apply(layout);
+	hs.application.launchOrFocus('Google Chrome')
+	if waitingForWindow('Google Chrome', setUpForWebDev) then return end
+
+	if not hs.window.find('DevTools') then
+		hs.window.find('Google Chrome'):application():selectMenuItem({'View', 'Developer', 'JavaScript Console'})
+		hs.timer.delayed.new(0.5, setUpForWebDev):start()
+	end
+
+	applyWebDevLayout()
 end
 
 hs.window.filter.new('Google Chrome')
 	:subscribe(hs.window.filter.windowFocused, function()
 		if chromeModal then return true end
 
-		chromeModal = hs.hotkey.modal.new('ctrl', 'space')
+		chromeModal = hs.hotkey.modal.new({'ctrl', 'alt', 'cmd'}, 'space')
 
 		chromeModal:bind('', 'c', function()
 			chromeModal:exit()
@@ -95,7 +116,7 @@ hs.window.filter.new('Mail')
 			end)
 		}
 
-		mailModal = hs.hotkey.modal.new('ctrl', 'space')
+		mailModal = hs.hotkey.modal.new({'ctrl', 'alt', 'cmd'}, 'space')
 		mail = hs.appfinder.appFromName('Mail')
 
 		mailModal:bind('', 'a', function()
@@ -119,7 +140,7 @@ hs.window.filter.new('Microsoft Outlook')
 	:subscribe(hs.window.filter.windowFocused, function()
 		if outlookModal then return true end
 
-		outlookModal = hs.hotkey.modal.new('ctrl', 'space')
+		outlookModal = hs.hotkey.modal.new({'ctrl', 'alt', 'cmd'}, 'space')
 		outlook = hs.appfinder.appFromName('Microsoft Outlook')
 
 		local commands = { }
@@ -149,7 +170,7 @@ hs.window.filter.new('iTerm2')
 	:subscribe(hs.window.filter.windowFocused, function()
 		if iTerm2Modal then return true end
 
-		iTerm2Modal = hs.hotkey.modal.new('ctrl', 'space')
+		iTerm2Modal = hs.hotkey.modal.new({'ctrl', 'alt', 'cmd'}, 'space')
 
 		iTerm2Modal:bind('', 'escape', function()
 			iTerm2Modal:exit()
