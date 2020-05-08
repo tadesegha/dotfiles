@@ -3,6 +3,10 @@ hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'r', function()
 	hs.alert.show('Config loaded')
 end)
 
+hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'right', function()
+	hs.window.focusedWindow():moveToUnit('[75, 0, 100, 100]')
+end)
+
 hs.hotkey.bind('ctrl', 'space', function()
 	hs.focus()
 	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "what can I do you for?")
