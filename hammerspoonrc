@@ -3,23 +3,28 @@ hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'r', function()
 	hs.alert.show('Config loaded')
 end)
 
-globalModal = hs.hotkey.modal.new({'ctrl', 'shift'}, 'space')
+hs.hotkey.bind('ctrl', 'space', function()
+	local currentWindow = hs.window.frontmostWindow();
+	hs.focus()
+	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "what can I do you for?")
 
-globalModal:bind('', 'space', function()
-	globalModal:exit()
-
-	local iTerm = hs.appfinder.appFromName('iTerm2')
-	iTerm:selectMenuItem({'Shell', 'New Window'})
-	hs.eventtap.keyStrokes('creds freedom password')
-	hs.eventtap.keyStroke('', 'return')
-	hs.timer.delayed.new(1, function()
-		iTerm:selectMenuItem({'Shell', 'Close'})
-	end):start()
+	if response == 'web dev' then setUpForWebDev() end
+	currentWindow:focus()
 end)
 
-globalModal:bind('', 'escape', function()
-	globalModal:exit()
-end)
+function setUpForWebDev()
+	local screen = hs.screen.allScreens()[1]:name()
+	if screen ~= 'LG Ultra HD' then
+		hs.dialog.blockAlert("hammerspoon", "I'm not sure how to set up on this display")
+		return true
+	end
+
+	local layout = {
+		{"Alacritty", nil, screen, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
+		{"Google Chrome", nil, screen, {x = 0, y = 0, w = 0.5, h = 1}, nil, nil},
+	}
+	hs.layout.apply(layout);
+end
 
 hs.window.filter.new('Google Chrome')
 	:subscribe(hs.window.filter.windowFocused, function()
