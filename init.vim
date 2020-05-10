@@ -6,6 +6,8 @@ call plug#begin(stdpath('data') . '/plugged')
 	Plug 'junegunn/fzf'
 	Plug 'junegunn/fzf.vim'
 	Plug 'neoclide/coc.nvim', { 'branch': 'release'}
+	Plug 'leafgarland/typescript-vim'
+	Plug 'peitalin/vim-jsx-typescript'
 call plug#end()
 
 " fzf settings
@@ -31,7 +33,7 @@ set tabstop=2
 set updatetime=300
 set linespace=7
 set splitright
-syntax off
+syntax on
 
 highlight PMenu ctermbg=black ctermfg=white
 
@@ -56,7 +58,7 @@ nmap <localleader>p <Plug>(coc-diagnostic-previous)
 nmap <localleader>r <Plug>(coc-rename)
 nmap <localleader>a :CocAction<cr>
 nmap <localleader>f :call CocAction('format')<cr>
-inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <c-\> coc#refresh()
 
 augroup Coc
   autocmd!
