@@ -1,1 +1,1 @@
-10-59/15 * * * * /usr/local/bin/hs -c "hs.alert.show('drink some water')"
+10-59/15 * * * * /usr/local/bin/hs -c "current = hs.window.focusedWindow(); hs.focus(); hs.dialog.blockAlert('health tips', 'drink some water'); current:focus()"
