@@ -8,13 +8,17 @@ hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'right', function()
 end)
 
 hs.hotkey.bind('ctrl', 'space', function()
+	local currentWindow = hs.window.focusedWindow()
 	hs.focus()
 	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "what can I do you for?")
+	currentWindow:focus()
 
 	local commands = {
 		webdev = setUpForWebDev,
-		ch = function() launch('Google Chrome') end,
-		t = function() launch('Alacritty') end
+		ch = function() hs.application.launchOrFocus('Google Chrome') end,
+		t = function() hs.application.launchOrFocus('Alacritty') end,
+		nutrien = setUpForNutrien,
+		devtools = openChromeDevTools
 	}
 
 	for key, value in pairs(commands) do
@@ -22,11 +26,48 @@ hs.hotkey.bind('ctrl', 'space', function()
 	end
 end)
 
-function launch(application)
-	hs.application.launchOrFocus(application)
+function showDialog(message)
+	hs.dialog.blockAlert('hammerspoon', message)
 end
 
-function isExpectedScreen() return screen ~= 'LG Ultra HD' end
+function resizeChromeWindow()
+	local currentWindow = hs.window.focusedWindow()
+	local screen = hs.screen.mainScreen()
+	local frame = currentWindow:frame()
+	local newFrame = screen:toUnitRect(frame)
+	newFrame.h = newFrame.h - 0.2;
+	currentWindow:moveToUnit(newFrame);
+	return newFrame
+end
+
+function openChromeDevTools()
+	local currentWindow = hs.window.focusedWindow()
+	if currentWindow:application():title() ~= 'Google Chrome' then
+		showDialog('Switch over to google chrome before trying to open the dev tools')
+		return
+	end
+
+	local frame = resizeChromeWindow()
+	if not hs.window.find('DevTools') then
+		hs.window.find('Google Chrome'):application():selectMenuItem({'View', 'Developer', 'JavaScript Console'})
+		hs.timer.delayed.new(0.5, function() positionChromeDevTools(frame) end):start()
+	end
+end
+
+function positionChromeDevTools(frame)
+	if waitingForWindow('DevTools', function() positionChromeDevTools(frame) end) then return end
+	frame.y = frame.y + frame.h
+	frame.h = 0.2
+	hs.window.find('DevTools'):moveToUnit(frame)
+end
+
+function isExpectedScreen() 
+	local screen = hs.screen.mainScreen():name()
+	if screen == 'LG Ultra HD' then return true end
+
+	hs.dialog.blockAlert("hammerspoon", "I'm not sure how to set up on this display")
+	return false
+end
 
 function waitingForWindow(title, func)
 	if hs.window.find(title) then return end
@@ -34,31 +75,36 @@ function waitingForWindow(title, func)
 	return true
 end
 
-function applyWebDevLayout()
-	hs.layout.apply({
-		{"Alacritty", nil, screen, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
-		{"Google Chrome", nil, screen, {x = 0, y = 0, w = 0.5, h = 0.75}, nil, nil}
-	})
-
-	hs.window.find('DevTools'):moveToUnit('[0, 75, 50, 100]')
-end
-
 function setUpForWebDev()
-	local screen = hs.screen.allScreens()[1]:name()
-	if not isExpectedScreen() then
-		hs.dialog.blockAlert("hammerspoon", "I'm not sure how to set up on this display")
-		return true
-	end
+	if not isExpectedScreen() then return end
 
 	hs.application.launchOrFocus('Google Chrome')
 	if waitingForWindow('Google Chrome', setUpForWebDev) then return end
 
-	if not hs.window.find('DevTools') then
-		hs.window.find('Google Chrome'):application():selectMenuItem({'View', 'Developer', 'JavaScript Console'})
-		hs.timer.delayed.new(0.5, setUpForWebDev):start()
-	end
+	hs.layout.apply({
+		{"Alacritty", nil, nil, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
+		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.5, h = 0.75}, nil, nil}
+	})
+end
 
-	applyWebDevLayout()
+function waitForLaunch(application, callback)
+	hs.application.launchOrFocus(application)
+	if waitingForWindow(application, callback) then return true end
+end
+
+function setUpForNutrien()
+	if not isExpectedScreen() then return end
+	if waitForLaunch('Google Chrome', setUpForNutrien) then return end
+	applyNutrienLayout()
+end
+
+function applyNutrienLayout()
+	hs.layout.apply({
+		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
+		{"Alacritty", nil, nil, {x = 0.4, y = 0, w = 0.25, h = 1}, nil, nil},
+		{"Microsoft Outlook", nil, nil, {x = 0.65, y = 0.4, w = 0.35, h = 0.4}, nil, nil},
+		{"Microsoft Teams", nil, nil, {x = 0.65, y = 0, w = 0.35, h = 0.4}, nil, nil},
+	})
 end
 
 hs.window.filter.new('Google Chrome')
