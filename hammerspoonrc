@@ -10,8 +10,10 @@ end)
 hs.hotkey.bind('ctrl', 'space', function()
 	local currentWindow = hs.window.focusedWindow()
 	hs.focus()
-	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "what can I do you for?")
+	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "what can I do you for?", '', 'OK', 'Cancel')
 	currentWindow:focus()
+
+	if isCancelled == 'Cancel' then return end
 
 	local commands = {
 		webdev = setUpForWebDev,
