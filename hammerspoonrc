@@ -36,10 +36,12 @@ function resizeChromeWindow()
 	local currentWindow = hs.window.focusedWindow()
 	local screen = hs.screen.mainScreen()
 	local frame = currentWindow:frame()
-	local newFrame = screen:toUnitRect(frame)
-	newFrame.h = newFrame.h - 0.2;
-	currentWindow:moveToUnit(newFrame);
-	return newFrame
+	local unitFrame = screen:toUnitRect(frame)
+	if unitFrame.h ~= 1 then return unitFrame end
+
+	unitFrame.h = unitFrame.h - 0.2
+	currentWindow:moveToUnit(unitFrame)
+	return unitFrame
 end
 
 function openChromeDevTools()
