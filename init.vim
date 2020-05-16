@@ -72,6 +72,8 @@ augroup TloCustom
 	autocmd BufEnter *.scss :call s:InitCodeFile()
 augroup end
 
+command! -nargs=1 Workspace call s:Workspace("<args>")
+
 function! s:GoToShell()
 	if bufexists('shell')
 		buffer shell
@@ -122,4 +124,20 @@ function! s:InitCodeFile()
 	elseif filereadable(expand('%:r') . '.tsx')
 		execute 'nmap <buffer> <localleader><localleader> :edit ' . expand('%:r') . '.tsx<cr>'
 	endif
+endfunction
+
+function! s:Workspace(environment)
+	let environments = {
+				\ 'coursera': '/Volumes/Data/coursera/machine-learning',
+				\ 'nutrien': '/Volumes/Data/nutrien',
+				\ 'ulo-client': '/Volumes/Data/ulomobilespa-client',
+				\ 'ulo-server': '/Volumes/Data/ulomobilespa-server'
+				\ }
+
+	buffer shell
+	bd!
+	bufdo bd
+	execute 'cd ' . environments[a:environment]
+	terminal
+	file shell
 endfunction

@@ -106,8 +106,8 @@ function applyNutrienLayout()
 	hs.layout.apply({
 		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
 		{"Alacritty", nil, nil, {x = 0.4, y = 0, w = 0.25, h = 1}, nil, nil},
-		{"Microsoft Outlook", nil, nil, {x = 0.65, y = 0.4, w = 0.35, h = 0.4}, nil, nil},
-		{"Microsoft Teams", nil, nil, {x = 0.65, y = 0, w = 0.35, h = 0.4}, nil, nil},
+		{"Microsoft Outlook", nil, nil, {x = 0.65, y = 0.2, w = 0.35, h = 0.4}, nil, nil},
+		{"Microsoft Teams", nil, nil, {x = 0.65, y = 0.6, w = 0.35, h = 0.4}, nil, nil},
 	})
 end
 
