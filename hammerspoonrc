@@ -20,13 +20,38 @@ hs.hotkey.bind('ctrl', 'space', function()
 		ch = function() hs.application.launchOrFocus('Google Chrome') end,
 		t = function() hs.application.launchOrFocus('Alacritty') end,
 		nutrien = setUpForNutrien,
-		devtools = openChromeDevTools
+		devtools = openChromeDevTools,
+		resize = resizeWindow
 	}
 
 	for key, value in pairs(commands) do
 		if response == key then value() end
 	end
 end)
+
+function resizeWindow()
+	local currentWindow = hs.window.focusedWindow()
+
+	hs.focus()
+	local btnSelected, response = hs.dialog.textPrompt("resize window", "enter unit dimensions (x, y, dx, dy)", '', 'OK', 'Cancel')
+	if btnSelected == 'Cancel' then return end
+
+	currentWindow:focus()
+	local components = split(response, ",")
+	local x = tonumber(components[1])
+	local y = tonumber(components[2])
+	local dx = tonumber(components[3])
+	local dy = tonumber(components[4])
+	currentWindow:moveToUnit(hs.geometry.rect(x, y, dx, dy))
+end
+
+function split(str, delimiter)
+	result = {};
+	for match in (str..delimiter):gmatch("(.-)"..delimiter) do
+		table.insert(result, match)
+	end
+	return result
+end
 
 function showDialog(message)
 	hs.dialog.blockAlert('hammerspoon', message)
@@ -103,11 +128,12 @@ function setUpForNutrien()
 end
 
 function applyNutrienLayout()
+	local margin = 0.0015
 	hs.layout.apply({
-		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
-		{"Alacritty", nil, nil, {x = 0.4, y = 0, w = 0.25, h = 1}, nil, nil},
-		{"Microsoft Outlook", nil, nil, {x = 0.65, y = 0.2, w = 0.35, h = 0.4}, nil, nil},
-		{"Microsoft Teams", nil, nil, {x = 0.65, y = 0.6, w = 0.35, h = 0.4}, nil, nil},
+		{"Google Chrome", nil, nil, {x = margin, y = 0, w = 0.4, h = 1}, nil, nil},
+		{"Alacritty", nil, nil, {x = 0.4 + margin, y = 0, w = 0.25, h = 1}, nil, nil},
+		{"Microsoft Outlook", nil, nil, {x = 0.65 + margin, y = 0.2, w = 0.35 - (margin * 3), h = 0.4}, nil, nil},
+		{"Microsoft Teams", nil, nil, {x = 0.65 + margin, y = 0.6, w = 0.35 - (margin * 3), h = 0.4}, nil, nil},
 	})
 end
 

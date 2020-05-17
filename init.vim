@@ -8,6 +8,7 @@ call plug#begin(stdpath('data') . '/plugged')
 	Plug 'neoclide/coc.nvim', { 'branch': 'release'}
 	Plug 'leafgarland/typescript-vim'
 	Plug 'peitalin/vim-jsx-typescript'
+	Plug 'vim-scripts/BufClose.vim'
 call plug#end()
 
 " fzf settings
@@ -73,6 +74,7 @@ augroup TloCustom
 augroup end
 
 command! -nargs=1 Workspace call s:Workspace("<args>")
+command! -nargs=? Bd :BufClose <args>
 
 function! s:GoToShell()
 	if bufexists('shell')
