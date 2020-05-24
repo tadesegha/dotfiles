@@ -128,18 +128,31 @@ function setUpForNutrien()
 end
 
 function applyNutrienLayout()
-	local margin = 0.0015
 	hs.layout.apply({
-		{"Google Chrome", nil, nil, {x = margin, y = 0, w = 0.4, h = 1}, nil, nil},
-		{"Alacritty", nil, nil, {x = 0.4 + margin, y = 0, w = 0.25, h = 1}, nil, nil},
-		{"Microsoft Outlook", nil, nil, {x = 0.65 + margin, y = 0.2, w = 0.35 - (margin * 3), h = 0.4}, nil, nil},
-		{"Microsoft Teams", nil, nil, {x = 0.65 + margin, y = 0.6, w = 0.35 - (margin * 3), h = 0.4}, nil, nil},
+		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
+		{"Alacritty", nil, nil, {x = 0.4, y = 0, w = 0.25, h = 1}, nil, nil},
+		{"Microsoft Outlook", nil, nil, {x = 0.65, y = 0.2, w = 0.35, h = 0.4}, nil, nil},
+		{"Microsoft Teams", nil, nil, {x = 0.65, y = 0.6, w = 0.35, h = 0.4}, nil, nil},
 	})
 end
 
 hs.window.filter.new('Google Chrome')
 	:subscribe(hs.window.filter.windowFocused, function()
 		if chromeModal then return true end
+
+		chromeBindings = {
+			hs.hotkey.bind('cmd', '1', function()
+				hs.application.frontmostApplication():selectMenuItem({ 'People', 'T-Lo' })
+			end),
+
+			hs.hotkey.bind('cmd', '2', function()
+				hs.application.frontmostApplication():selectMenuItem({ 'People', 'Nutrien' })
+			end),
+
+			hs.hotkey.bind('cmd', '3', function()
+				hs.application.frontmostApplication():selectMenuItem({ 'People', 'Nutrien Admin' })
+			end)
+		}
 
 		chromeModal = hs.hotkey.modal.new({'ctrl', 'alt', 'cmd'}, 'space')
 
@@ -194,6 +207,8 @@ hs.window.filter.new('Google Chrome')
 	:subscribe(hs.window.filter.windowUnfocused, function()
 		chromeModal:delete()
 		chromeModal = nil
+
+		for key, binding in pairs(chromeBindings) do binding:delete() end
 	end)
 
 hs.window.filter.new('Mail')
