@@ -142,4 +142,24 @@ function! s:Workspace(environment)
 	execute 'cd ' . environments[a:environment]
 	terminal
 	file shell
+
+	if a:environment == 'ulo-client'
+		terminal
+		file react-scripts
+		call jobsend(b:terminal_job_id, "npm run start\n")
+	endif
+
+	if a:environment == 'ulo-server'
+		terminal
+		file mongodb
+		call jobsend(b:terminal_job_id, "npm run db\n")
+
+		terminal
+		file mongodb-client
+		call jobsend(b:terminal_job_id, "mongo\n")
+
+		terminal
+		file node-dev
+		call jobsend(b:terminal_job_id, "npm run start\n")
+	endif
 endfunction
