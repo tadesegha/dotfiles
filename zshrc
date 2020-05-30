@@ -103,7 +103,7 @@ alias dotfiles='/Volumes/Data/dotfiles'
 
 # Functions
 creds() {
-	id=$(lpass ls | grep $1 | cut -f 3 -d ' ' | cut -f 1 -d ']')
+	id=$(lpass ls | grep "$1 " | cut -f 3 -d ' ' | cut -f 1 -d ']')
   lpass show --$2 --clip $id
 }
 
