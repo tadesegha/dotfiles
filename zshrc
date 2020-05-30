@@ -103,7 +103,7 @@ alias dotfiles='/Volumes/Data/dotfiles'
 
 # Functions
 creds() {
-  id=$(cat '/Volumes/Data/onedrive - adesegha/.accounts' | grep "$1 " | cut -d ' ' -f 2)
+	id=$(lpass ls | grep $1 | cut -f 3 -d ' ' | cut -f 1 -d ']')
   lpass show --$2 --clip $id
 }
 
