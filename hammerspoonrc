@@ -18,7 +18,7 @@ hs.hotkey.bind('ctrl', 'space', function()
 	local commands = {
 		webdev = setUpForWebDev,
 		ch = function() hs.application.launchOrFocus('Google Chrome') end,
-		t = function() hs.application.launchOrFocus('Alacritty') end,
+		t = function() hs.application.launchOrFocus('iTerm2') end,
 		nutrien = setUpForNutrien,
 		devtools = openChromeDevTools,
 		resize = resizeWindow
@@ -111,7 +111,7 @@ function setUpForWebDev()
 	if waitingForWindow('Google Chrome', setUpForWebDev) then return end
 
 	hs.layout.apply({
-		{"Alacritty", nil, nil, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
+		{"iTerm2", nil, nil, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
 		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.5, h = 0.75}, nil, nil}
 	})
 end
@@ -130,7 +130,7 @@ end
 function applyNutrienLayout()
 	hs.layout.apply({
 		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
-		{"Alacritty", nil, nil, {x = 0.4, y = 0, w = 0.25, h = 1}, nil, nil},
+		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.25, h = 1}, nil, nil},
 		{"Microsoft Outlook", nil, nil, {x = 0.65, y = 0.2, w = 0.35, h = 0.4}, nil, nil},
 		{"Microsoft Teams", nil, nil, {x = 0.65, y = 0.6, w = 0.35, h = 0.4}, nil, nil},
 	})
@@ -151,6 +151,10 @@ hs.window.filter.new('Google Chrome')
 
 			hs.hotkey.bind('cmd', '3', function()
 				hs.application.frontmostApplication():selectMenuItem({ 'People', 'Nutrien Admin' })
+			end),
+
+			hs.hotkey.bind('cmd', '4', function()
+				hs.application.frontmostApplication():selectMenuItem({ 'People', 'Tolu (Stoke)' })
 			end)
 		}
 
