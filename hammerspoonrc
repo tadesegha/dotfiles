@@ -33,15 +33,15 @@ function resizeWindow()
 	local currentWindow = hs.window.focusedWindow()
 
 	hs.focus()
-	local btnSelected, response = hs.dialog.textPrompt("resize window", "enter unit dimensions (x, y, dx, dy)", '', 'OK', 'Cancel')
+	local btnSelected, response = hs.dialog.textPrompt("resize window", "enter unit dimensions (x, dx, y, dy)", '', 'OK', 'Cancel')
 	if btnSelected == 'Cancel' then return end
 
 	currentWindow:focus()
 	local components = split(response, ",")
 	local x = tonumber(components[1])
-	local y = tonumber(components[2])
-	local dx = tonumber(components[3])
-	local dy = tonumber(components[4])
+	local dx = tonumber(components[2])
+	local y = tonumber(components[3]) or 0
+	local dy = tonumber(components[4]) or 1
 	currentWindow:moveToUnit(hs.geometry.rect(x, y, dx, dy))
 end
 
@@ -112,7 +112,7 @@ function setUpForWebDev()
 
 	hs.layout.apply({
 		{"iTerm2", nil, nil, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
-		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.5, h = 0.75}, nil, nil}
+		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.5, h = 1}, nil, nil}
 	})
 end
 
