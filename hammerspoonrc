@@ -17,7 +17,6 @@ hs.hotkey.bind('ctrl', 'space', function()
 
 	local commands = {
 		webdev = setUpForWebDev,
-		ch = function() hs.application.launchOrFocus('Google Chrome') end,
 		t = function() hs.application.launchOrFocus('iTerm2') end,
 		nutrien = setUpForNutrien,
 		devtools = openChromeDevTools,
@@ -111,8 +110,8 @@ function setUpForWebDev()
 	if waitingForWindow('Google Chrome', setUpForWebDev) then return end
 
 	hs.layout.apply({
-		{"iTerm2", nil, nil, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
-		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.5, h = 1}, nil, nil}
+		{"iTerm", nil, nil, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
+		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.5, h = 1}, nil, nil}
 	})
 end
 
@@ -123,14 +122,14 @@ end
 
 function setUpForNutrien()
 	if not isExpectedScreen() then return end
-	if waitForLaunch('Google Chrome', setUpForNutrien) then return end
+	if waitForLaunch('Brave Browser', setUpForNutrien) then return end
 	applyNutrienLayout()
 end
 
 function applyNutrienLayout()
 	hs.layout.apply({
-		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
-		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
+		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
+		{"iTerm", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
 		{"Microsoft Outlook", nil, nil, {x = 0.7, y = 0.2, w = 0.3, h = 0.4}, nil, nil},
 		{"Microsoft Teams", nil, nil, {x = 0.7, y = 0.6, w = 0.3, h = 0.4}, nil, nil},
 	})
@@ -159,9 +158,6 @@ hs.window.filter.new('Brave Browser')
 		}
 	end)
 	:subscribe(hs.window.filter.windowUnfocused, function()
-		brave:delete()
-		brave = nil
-
 		for key, binding in pairs(braveBindings) do binding:delete() end
 	end)
 
