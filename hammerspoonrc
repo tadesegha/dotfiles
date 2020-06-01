@@ -130,11 +130,40 @@ end
 function applyNutrienLayout()
 	hs.layout.apply({
 		{"Google Chrome", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
-		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.25, h = 1}, nil, nil},
-		{"Microsoft Outlook", nil, nil, {x = 0.65, y = 0.2, w = 0.35, h = 0.4}, nil, nil},
-		{"Microsoft Teams", nil, nil, {x = 0.65, y = 0.6, w = 0.35, h = 0.4}, nil, nil},
+		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
+		{"Microsoft Outlook", nil, nil, {x = 0.7, y = 0.2, w = 0.3, h = 0.4}, nil, nil},
+		{"Microsoft Teams", nil, nil, {x = 0.7, y = 0.6, w = 0.3, h = 0.4}, nil, nil},
 	})
 end
+
+hs.window.filter.new('Brave Browser')
+	:subscribe(hs.window.filter.windowFocused, function()
+		if braveModal then return true end
+
+		braveBindings = {
+			hs.hotkey.bind('cmd', '1', function()
+				hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'T-Lo' })
+			end),
+
+			hs.hotkey.bind('cmd', '2', function()
+				hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Nutrien' })
+			end),
+
+			hs.hotkey.bind('cmd', '3', function()
+				hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Nutrien Admin' })
+			end),
+
+			hs.hotkey.bind('cmd', '4', function()
+				hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Tolu (Stoke)' })
+			end)
+		}
+	end)
+	:subscribe(hs.window.filter.windowUnfocused, function()
+		brave:delete()
+		brave = nil
+
+		for key, binding in pairs(braveBindings) do binding:delete() end
+	end)
 
 hs.window.filter.new('Google Chrome')
 	:subscribe(hs.window.filter.windowFocused, function()
@@ -275,7 +304,7 @@ hs.window.filter.new('Microsoft Outlook')
 		outlook = nil
 	end)
 
-hs.window.filter.new('iTerm2')
+hs.window.filter.new('iTerm')
 	:subscribe(hs.window.filter.windowFocused, function()
 		if iTerm2Modal then return true end
 

@@ -75,6 +75,7 @@ augroup end
 
 command! -nargs=1 Workspace call s:Workspace("<args>")
 command! -nargs=? Bd :BufClose <args>
+command! FormatJson %! python -m json.tool
 
 function! s:GoToShell()
 	if bufexists('shell')
