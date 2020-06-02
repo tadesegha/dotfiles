@@ -115,14 +115,11 @@ function setUpForWebDev()
 	})
 end
 
-function waitForLaunch(application, callback)
-	hs.application.launchOrFocus(application)
-	if waitingForWindow(application, callback) then return true end
-end
-
 function setUpForNutrien()
 	if not isExpectedScreen() then return end
-	if waitForLaunch('Brave Browser', setUpForNutrien) then return end
+
+	hs.application.launchOrFocus('Brave Browser')
+	if waitingForWindow('Brave', setupForNutrien) then return end
 	applyNutrienLayout()
 end
 
