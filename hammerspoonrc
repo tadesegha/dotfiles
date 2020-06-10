@@ -1,8 +1,3 @@
-hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'r', function()
-	hs.reload()
-	hs.alert.show('Config loaded')
-end)
-
 hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'right', function()
 	hs.window.focusedWindow():moveToUnit('[75, 0, 100, 100]')
 end)
@@ -20,13 +15,19 @@ hs.hotkey.bind('ctrl', 'space', function()
 		t = function() hs.application.launchOrFocus('iTerm2') end,
 		nutrien = setUpForNutrien,
 		devtools = openChromeDevTools,
-		resize = resizeWindow
+		resize = resizeWindow,
+		reload = reload
 	}
 
 	for key, value in pairs(commands) do
 		if response == key then value() end
 	end
 end)
+
+function reload()
+	hs.reload()
+	hs.alert.show('Config loaded')
+end
 
 function resizeWindow()
 	local currentWindow = hs.window.focusedWindow()
@@ -106,11 +107,11 @@ end
 function setUpForWebDev()
 	if not isExpectedScreen() then return end
 
-	hs.application.launchOrFocus('Google Chrome')
-	if waitingForWindow('Google Chrome', setUpForWebDev) then return end
+	hs.application.launchOrFocus('Brave Browser')
+	if waitingForWindow('Brave', setUpForWebDev) then return end
 
 	hs.layout.apply({
-		{"iTerm", nil, nil, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
+		{"iTerm2", nil, nil, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
 		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.5, h = 1}, nil, nil}
 	})
 end
@@ -126,8 +127,8 @@ end
 function applyNutrienLayout()
 	hs.layout.apply({
 		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
-		{"iTerm", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
-		{"Microsoft Outlook", nil, nil, {x = 0.7, y = 0.2, w = 0.3, h = 0.4}, nil, nil},
+		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
+		{"Microsoft Outlook", nil, nil, {x = 0.7, y = 0, w = 0.3, h = 0.6}, nil, nil},
 		{"Microsoft Teams", nil, nil, {x = 0.7, y = 0.6, w = 0.3, h = 0.4}, nil, nil},
 	})
 end
@@ -150,7 +151,7 @@ hs.window.filter.new('Brave Browser')
 			end),
 
 			hs.hotkey.bind('cmd', '4', function()
-				hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Tolu (Stoke)' })
+				hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Stoke' })
 			end)
 		}
 	end)
