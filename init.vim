@@ -70,7 +70,7 @@ augroup end
 augroup TloCustom
 	autocmd!
 	autocmd BufEnter *.js,*.tsx :call s:InitStylesFile()
-	autocmd BufEnter *.scss :call s:InitCodeFile()
+	autocmd BufEnter *.scss,*.css :call s:InitCodeFile()
 augroup end
 
 command! -nargs=1 Workspace call s:Workspace("<args>")
@@ -118,6 +118,9 @@ endfunction
 function! s:InitStylesFile()
 	if filereadable(expand('%:r') . '.scss')
 		execute 'nmap <buffer> <localleader><localleader> :edit ' . expand('%:r') . '.scss<cr>'
+	endif
+	if filereadable(expand('%:r') . '.css')
+		execute 'nmap <buffer> <localleader><localleader> :edit ' . expand('%:r') . '.css<cr>'
 	endif
 endfunction
 
