@@ -125,3 +125,7 @@ export PATH=/usr/local/opt/node@10/bin:/Applications/MongoDB.app/Contents/Resour
 export PATH=/Users/tlo/Library/Python/3.7/bin:$PATH
 export PATH=/usr/local/octave/3.8.0/bin:$PATH
 export PATH=/usr/local/opt/curl/bin:$PATH
+
+# tabtab source for packages
+# uninstall by removing these lines
+[[ -f ~/.config/tabtab/__tabtab.zsh ]] && . ~/.config/tabtab/__tabtab.zsh || true
