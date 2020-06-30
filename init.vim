@@ -12,7 +12,7 @@ call plug#begin(stdpath('data') . '/plugged')
 call plug#end()
 
 " fzf settings
-let $FZF_DEFAULT_COMMAND = 'rg --files --glob "!*node_module*" --glob "!*bin*" --glob "!*obj*" --glob "!*build*" --glob "!*packages*"'
+let $FZF_DEFAULT_COMMAND = 'rga --files --glob "!*node_module*" --glob "!*bin*" --glob "!*obj*" --glob "!*build*" --glob "!*packages*"'
 
 " neovim settings
 let mapleader = '-'
