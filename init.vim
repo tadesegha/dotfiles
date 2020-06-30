@@ -51,7 +51,7 @@ nmap <space> :
 tnoremap <leader><space> <c-\><c-n>
 
 " coc settings
-let g:coc_global_extensions = ['joc-tsserver', 'coc-json', 'coc-html']
+let g:coc_global_extensions = ['joc-tsserver', 'coc-json', 'coc-html', 'coc-prettier']
 nmap <localleader>d <Plug>(coc-definition)
 nmap <localleader>i <Plug>(coc-implementation)
 nmap <localleader>u <Plug>(coc-references)
