@@ -14,7 +14,7 @@ hs.hotkey.bind('ctrl', 'space', function()
 		webdev = setUpForWebDev,
 		t = function() hs.application.launchOrFocus('iTerm2') end,
 		nutrien = setUpForNutrien,
-		devtools = openChromeDevTools,
+		devtools = openDevTools,
 		resize = resizeWindow,
 		reload = reload
 	}
@@ -38,10 +38,10 @@ function resizeWindow()
 
 	currentWindow:focus()
 	local components = split(response, ",")
-	local x = tonumber(components[1])
-	local dx = tonumber(components[2])
+	local x = tonumber(components[1]) or 0
+	local dx = tonumber(components[2]) or (1 - x)
 	local y = tonumber(components[3]) or 0
-	local dy = tonumber(components[4]) or 1
+	local dy = tonumber(components[4]) or (1 - y)
 	currentWindow:moveToUnit(hs.geometry.rect(x, y, dx, dy))
 end
 
@@ -69,18 +69,8 @@ function resizeChromeWindow()
 	return unitFrame
 end
 
-function openChromeDevTools()
-	local currentWindow = hs.window.focusedWindow()
-	if currentWindow:application():title() ~= 'Google Chrome' then
-		showDialog('Switch over to google chrome before trying to open the dev tools')
-		return
-	end
-
-	local frame = resizeChromeWindow()
-	if not hs.window.find('DevTools') then
-		hs.window.find('Google Chrome'):application():selectMenuItem({'View', 'Developer', 'JavaScript Console'})
-		hs.timer.delayed.new(0.5, function() positionChromeDevTools(frame) end):start()
-	end
+function openDevTools()
+	hs.application.frontmostApplication():selectMenuItem({'View', 'Developer', 'JavaScript Console'})
 end
 
 function positionChromeDevTools(frame)
@@ -111,8 +101,8 @@ function setUpForWebDev()
 	if waitingForWindow('Brave', setUpForWebDev) then return end
 
 	hs.layout.apply({
-		{"iTerm2", nil, nil, {x = 0.5, y = 0, w = 0.25, h = 1}, nil, nil},
-		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.5, h = 1}, nil, nil}
+		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
+		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
 	})
 end
 
@@ -128,7 +118,6 @@ function applyNutrienLayout()
 	hs.layout.apply({
 		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
 		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
-		{"Microsoft Outlook", nil, nil, {x = 0.7, y = 0, w = 0.3, h = 0.6}, nil, nil},
 		{"Microsoft Teams", nil, nil, {x = 0.7, y = 0.6, w = 0.3, h = 0.4}, nil, nil},
 	})
 end

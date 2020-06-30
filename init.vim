@@ -15,6 +15,7 @@ call plug#end()
 let $FZF_DEFAULT_COMMAND = 'rg --files --glob "!*node_module*" --glob "!*bin*" --glob "!*obj*" --glob "!*build*" --glob "!*packages*"'
 
 " neovim settings
+let mapleader = '-'
 let maplocalleader = ','
 
 set autoindent
@@ -43,14 +44,14 @@ nmap <c-j> <c-w><c-j>
 nmap <c-k> <c-w><c-k>
 nmap <c-l> <c-w><c-l>
 nmap <leader><leader> <c-^>
-nmap <leader>b :Buffers<cr>
+nmap <leader><space> :Buffers<cr>
 nmap <leader>e :Files<cr>
 nmap <leader>t :call <SID>GoToShell()<cr>
 nmap <space> :
-tnoremap <leader><leader> <c-\><c-n>
+tnoremap <leader><space> <c-\><c-n>
 
 " coc settings
-let g:coc_global_extensions = ['coc-tsserver', 'coc-json', 'coc-html']
+let g:coc_global_extensions = ['joc-tsserver', 'coc-json', 'coc-html']
 nmap <localleader>d <Plug>(coc-definition)
 nmap <localleader>i <Plug>(coc-implementation)
 nmap <localleader>u <Plug>(coc-references)
@@ -59,7 +60,7 @@ nmap <localleader>p <Plug>(coc-diagnostic-previous)
 nmap <localleader>r <Plug>(coc-rename)
 nmap <localleader>a :CocAction<cr>
 nmap <localleader>f :call CocAction('format')<cr>
-inoremap <silent><expr> <c-\> coc#refresh()
+inoremap <silent><expr> <c-a> coc#refresh()
 
 augroup Coc
   autocmd!
