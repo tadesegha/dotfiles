@@ -9,6 +9,7 @@ call plug#begin(stdpath('data') . '/plugged')
 	Plug 'leafgarland/typescript-vim'
 	Plug 'peitalin/vim-jsx-typescript'
 	Plug 'vim-scripts/BufClose.vim'
+	Plug 'sirver/ultisnips'
 call plug#end()
 
 " fzf settings
@@ -22,7 +23,7 @@ set autoindent
 set noexpandtab
 set hidden
 set ignorecase
-" set list
+set list
 set listchars=eol:¬,trail:·,tab:»\ 
 set nohlsearch
 set noswapfile
@@ -35,6 +36,8 @@ set tabstop=2
 set updatetime=300
 set linespace=7
 set splitright
+set timeoutlen=300
+set guicursor=
 syntax on
 
 highlight PMenu ctermbg=black ctermfg=white
@@ -48,10 +51,10 @@ nmap <leader><space> :Buffers<cr>
 nmap <leader>e :Files<cr>
 nmap <leader>t :call <SID>GoToShell()<cr>
 nmap <space> :
-tnoremap <leader><space> <c-\><c-n>
+tnoremap ;; <c-\><c-n>
 
 " coc settings
-let g:coc_global_extensions = ['joc-tsserver', 'coc-json', 'coc-html', 'coc-prettier']
+let g:coc_global_extensions = ['coc-json', 'coc-html', 'coc-prettier']
 nmap <localleader>d <Plug>(coc-definition)
 nmap <localleader>i <Plug>(coc-implementation)
 nmap <localleader>u <Plug>(coc-references)
@@ -74,9 +77,18 @@ augroup TloCustom
 	autocmd BufEnter *.scss,*.css :call s:InitCodeFile()
 augroup end
 
+augroup TxtFiles
+	autocmd!
+	autocmd BufEnter *.txt nmap <buffer> <localleader>- r<c-v>u2713
+augroup end
+
 command! -nargs=1 Workspace call s:Workspace("<args>")
 command! -nargs=? Bd :BufClose <args>
 command! FormatJson %! python -m json.tool
+command! -nargs=1 Notes :e ~/OneDrive - adesegha/notes/<args>.txt
+command! Todo :e ~/OneDrive - adesegha/notes/todo.txt
+command! Inbox :e ~/OneDrive - adesegha/notes/inbox.txt
+command! Auto :e ~/OneDrive - adesegha/notes/automation.txt
 
 function! s:GoToShell()
 	if bufexists('shell')
@@ -138,7 +150,10 @@ function! s:Workspace(environment)
 				\ 'coursera': '/Volumes/Data/coursera/machine-learning',
 				\ 'nutrien': '/Volumes/Data/nutrien',
 				\ 'ulo-client': '/Volumes/Data/ulomobilespa-client',
-				\ 'ulo-server': '/Volumes/Data/ulomobilespa-server'
+				\ 'ulo-server': '/Volumes/Data/ulomobilespa-server',
+				\ 'stoke-portal': '~/dev/stoke/portal',
+				\ 'stoke-api': '~/dev/stoke/api',
+				\ 'cm': '~/dev/central-marketing'
 				\ }
 
 	buffer shell
@@ -166,5 +181,14 @@ function! s:Workspace(environment)
 		terminal
 		file node-dev
 		call jobsend(b:terminal_job_id, "npm run start\n")
+	endif
+
+	if a:environment == 'stoke-portal'
+		terminal
+		file react-scripts
+		call jobsend(b:terminal_job_id, "npm run start\n")
+	endif
+
+	if a:environment == 'cm'
 	endif
 endfunction

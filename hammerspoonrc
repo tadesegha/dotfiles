@@ -1,8 +1,11 @@
-hs.hotkey.bind({'cmd', 'alt', 'ctrl'}, 'right', function()
-	hs.window.focusedWindow():moveToUnit('[75, 0, 100, 100]')
+require("hs.ipc")
+hs.ipc.cliInstall()
+
+hs.hotkey.bind('alt', 'space', function()
+	hs.application.frontmostApplication():selectMenuItem({'Help'})
 end)
 
-hs.hotkey.bind('ctrl', 'space', function()
+hs.hotkey.bind({'ctrl', 'alt', 'shift'}, 'space', function()
 	local currentWindow = hs.window.focusedWindow()
 	hs.focus()
 	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "what can I do you for?", '', 'OK', 'Cancel')
@@ -11,12 +14,12 @@ hs.hotkey.bind('ctrl', 'space', function()
 	if isCancelled == 'Cancel' then return end
 
 	local commands = {
-		webdev = setUpForWebDev,
 		t = function() hs.application.launchOrFocus('iTerm2') end,
-		nutrien = setUpForNutrien,
-		devtools = openDevTools,
-		resize = resizeWindow,
-		reload = reload
+		fe = focusEditor,
+		fb = focusBrowser,
+		dt = openDevTools,
+		rw = resizeWindow,
+		r = reload
 	}
 
 	for key, value in pairs(commands) do
@@ -94,31 +97,31 @@ function waitingForWindow(title, func)
 	return true
 end
 
-function setUpForWebDev()
+function focusEditor()
 	if not isExpectedScreen() then return end
 
 	hs.application.launchOrFocus('Brave Browser')
-	if waitingForWindow('Brave', setUpForWebDev) then return end
+	if waitingForWindow('Brave', focusEditor) then return end
 
 	hs.layout.apply({
-		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
 		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
+		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
+		{"Microsoft Teams", nil, nil, {x = 0.7, y = 0.5, w = 0.3, h = 0.5}, nil, nil},
+		{"Slack", nil, nil, {x = 0.7, y = 0, w = 0.3, h = 0.5}, nil, nil},
 	})
 end
 
-function setUpForNutrien()
+function focusBrowser()
 	if not isExpectedScreen() then return end
 
 	hs.application.launchOrFocus('Brave Browser')
-	if waitingForWindow('Brave', setupForNutrien) then return end
-	applyNutrienLayout()
-end
+	if waitingForWindow('Brave', focusBrowser) then return end
 
-function applyNutrienLayout()
 	hs.layout.apply({
-		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
-		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
-		{"Microsoft Teams", nil, nil, {x = 0.7, y = 0.6, w = 0.3, h = 0.4}, nil, nil},
+		{"Brave Browser", nil, nil, {x = 0.3, y = 0, w = 0.4, h = 1}, nil, nil},
+		{"iTerm2", nil, nil, {x = 0, y = 0, w = 0.3, h = 1}, nil, nil},
+		{"Microsoft Teams", nil, nil, {x = 0.7, y = 0.5, w = 0.3, h = 0.5}, nil, nil},
+		{"Slack", nil, nil, {x = 0.7, y = 0, w = 0.3, h = 0.5}, nil, nil},
 	})
 end
 
