@@ -2,6 +2,7 @@
   name = Tolu Adesegha
   email = tolu@adesegha.ca
   editor = nvim
+	signingkey = F6BFD4906A0A76BD
 [alias]
   a = add
   aa = add -A
@@ -24,3 +25,5 @@
   rh = reset --hard
   rv = revert
   s = status
+[gpg]
+	program = gpg2

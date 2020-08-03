@@ -19,13 +19,28 @@ hs.hotkey.bind({'ctrl', 'alt', 'shift'}, 'space', function()
 		fb = focusBrowser,
 		dt = openDevTools,
 		rw = resizeWindow,
-		r = reload
+		r = reload,
+		a = applicationMode
 	}
 
 	for key, value in pairs(commands) do
 		if response == key then value() end
 	end
 end)
+
+function applicationMode()
+	hs.alert.show('application mode')
+	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "application mode", '', 'OK', 'Cancel')
+	if isCancelled == 'Cancel' then return end
+
+	local commands = {
+		b = function() hs.application.launchOrFocus('Brave') end
+	}
+
+	for key, value in pairs(commands) do
+		if response == key then value() end
+	end
+end
 
 function reload()
 	hs.reload()
@@ -105,9 +120,7 @@ function focusEditor()
 
 	hs.layout.apply({
 		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
-		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.3, h = 1}, nil, nil},
-		{"Microsoft Teams", nil, nil, {x = 0.7, y = 0.5, w = 0.3, h = 0.5}, nil, nil},
-		{"Slack", nil, nil, {x = 0.7, y = 0, w = 0.3, h = 0.5}, nil, nil},
+		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.6, h = 1}, nil, nil},
 	})
 end
 

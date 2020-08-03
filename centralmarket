@@ -1,0 +1,3 @@
+alias cm="cd ~/dev/central-market"
+alias cmwp="cd ~/dev/central-market/cm-local-dev-environment/centralmarket.com"
+alias cmrs="cd ~/dev/central-market/cm-local-dev-environment/react-service/cm-react-service"

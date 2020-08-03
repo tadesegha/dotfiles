@@ -153,7 +153,7 @@ function! s:Workspace(environment)
 				\ 'ulo-server': '/Volumes/Data/ulomobilespa-server',
 				\ 'stoke-portal': '~/dev/stoke/portal',
 				\ 'stoke-api': '~/dev/stoke/api',
-				\ 'cm': '~/dev/central-marketing'
+				\ 'cm': '~/dev/central-market/cm-local-dev-environment/react-service/cm-react-service'
 				\ }
 
 	buffer shell
@@ -190,5 +190,14 @@ function! s:Workspace(environment)
 	endif
 
 	if a:environment == 'cm'
+		terminal
+		file docker-compose
+		call jobsend(b:terminal_job_id, "cd ~/dev/central-market/cm-local-dev-environment && docker-machine start; eval $(docker-machine env) && docker-compose up\n")
+
+		terminal
+		file react-service-local
+		call jobsend(b:terminal_job_id, "yarn start\n")
+
+		buffer shell
 	endif
 endfunction
