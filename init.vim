@@ -20,7 +20,7 @@ let mapleader = '-'
 let maplocalleader = ','
 
 set autoindent
-set noexpandtab
+set expandtab
 set hidden
 set ignorecase
 set list
