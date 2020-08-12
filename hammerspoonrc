@@ -56,10 +56,10 @@ function resizeWindow()
 
 	currentWindow:focus()
 	local components = split(response, ",")
-	local x = tonumber(components[1]) or 0
-	local dx = tonumber(components[2]) or (1 - x)
-	local y = tonumber(components[3]) or 0
-	local dy = tonumber(components[4]) or (1 - y)
+	local x = (tonumber(components[1]) or 0) / 10
+	local dx = (tonumber(components[2]) or (10 - x)) / 10
+	local y = (tonumber(components[3]) or 0) / 10
+	local dy = (tonumber(components[4]) or (10 - y)) / 10
 	currentWindow:moveToUnit(hs.geometry.rect(x, y, dx, dy))
 end
 
