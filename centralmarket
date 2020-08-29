@@ -1,3 +1,6 @@
 alias cm="cd ~/dev/central-market"
-alias cmwp="cd ~/dev/central-market/cm-local-dev-environment/centralmarket.com"
+alias cmwp="cd ~/dev/central-market/cm-local-dev-environment/centralmarket.com/html"
 alias cmrs="cd ~/dev/central-market/cm-local-dev-environment/react-service/cm-react-service"
+
+# central market aliases
+alias cm-switch-branch='cd ~/dev/central-market/cm-local-dev-environment/centralmarket.com/html && composer install && cd wp-content/themes/centralmarket-theme/ && npm ci && npm run prod && wp plugin activate centralmarket-react-service'

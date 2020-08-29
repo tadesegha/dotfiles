@@ -7,10 +7,6 @@ source ~/dotfiles/zsh/prompt
 # bash completion - used for git
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 
-# central market aliases
-# alias cm-switch-branch='cd ~/dev/central-market/cm-local-dev-environment/centralmarket.com/html && composer install && npm ci && npm run production && cd ../../themes/centralmarket-theme/ && npm ci && npm run build && cd ../../../'
-# run composer install && npm ci && npm run production in wp-content/themes/centralmarket-theme and in root
-
 # rg aliases
 alias rgi='rg --ignore-case'
 
@@ -30,12 +26,22 @@ alias dcu='docker-compose up'
 
 alias dms='docker-machine start; eval $(docker-machine env)'
 
+# random aliases ... probably specific to mbp-16
+alias tsc=/Users/tlo/.nvm/versions/node/v10.21.0/bin/tsc
+alias firebase="`npm config get prefix`/bin/firebase"
+
 export GOPATH=$HOME/go
 export GOROOT="$(brew --prefix golang)/libexec"
 export PATH="/usr/local/opt/node@12/bin:$PATH:${GOPATH}/bin:$HOME/devtools"
 export EDITOR=nvim
 
-fpath=(~/.zsh-funcs $fpath)
-autoload creds
-
 set -o vi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Load Git completion
+zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
+fpath=(~/.zsh $fpath)
+
+autoload creds
+autoload -Uz compinit && compinit

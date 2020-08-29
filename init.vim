@@ -1,6 +1,17 @@
 " help ctrl-w
 " |CTRL-W__|  CTRL-W _	 set current window height to N (default: very
 " high)
+"
+" ✓ - ^KOK
+
+nmap h <nop>
+nmap j <nop>
+nmap k <nop>
+nmap l <nop>
+vmap h <nop>
+vmap j <nop>
+vmap k <nop>
+vmap l <nop>
 
 call plug#begin(stdpath('data') . '/plugged')
 	Plug 'junegunn/fzf'
@@ -35,23 +46,35 @@ set smartindent
 set tabstop=2
 set updatetime=300
 set linespace=7
-set splitright
 set timeoutlen=300
 set guicursor=
 syntax on
 
 highlight PMenu ctermbg=black ctermfg=white
 
-nmap <c-h> <c-w><c-h>
-nmap <c-j> <c-w><c-j>
-nmap <c-k> <c-w><c-k>
-nmap <c-l> <c-w><c-l>
 nmap <leader><leader> <c-^>
 nmap <leader><space> :Buffers<cr>
 nmap <leader>e :Files<cr>
 nmap <leader>t :call <SID>GoToShell()<cr>
 nmap <space> :
+
+" window navigation remappings
+nmap <c-h> <c-w><c-h>
+nmap <c-t> <c-w><c-j>
+nmap <c-n> <c-w><c-k>
+nmap <c-s> <c-w><c-l>
 tnoremap ;; <c-\><c-n>
+tnoremap <c-h> <c-\><c-n><c-w><c-h>
+tnoremap <c-t> <c-\><c-n><c-w><c-j>
+tnoremap <c-n> <c-\><c-n><c-w><c-k>
+tnoremap <c-s> <c-\><c-n><c-w><c-l>
+
+" terminal autocommands
+augroup Terminal
+  autocmd!
+  autocmd BufEnter * call s:TerminalStartInsert()
+  autocmd BufLeave * call s:TerminalStopInsert()
+augroup end
 
 " coc settings
 let g:coc_global_extensions = ['coc-json', 'coc-html', 'coc-prettier']
@@ -61,6 +84,7 @@ nmap <localleader>u <Plug>(coc-references)
 nmap <localleader>n <Plug>(coc-diagnostic-next)
 nmap <localleader>p <Plug>(coc-diagnostic-previous)
 nmap <localleader>r <Plug>(coc-rename)
+nmap <localleader><space> <Plug>(coc-fix-current)
 nmap <localleader>a :CocAction<cr>
 nmap <localleader>f :call CocAction('format')<cr>
 inoremap <silent><expr> <c-a> coc#refresh()
@@ -82,7 +106,10 @@ augroup TxtFiles
 	autocmd BufEnter *.txt nmap <buffer> <localleader>- r<c-v>u2713
 augroup end
 
+command! -nargs=1 -complete=dir NewWorkspace call s:NewWorkspace("<args>")
 command! -nargs=1 Workspace call s:Workspace("<args>")
+command! Tests call s:Tests()
+command! Dev call s:Dev()
 command! -nargs=? Bd :BufClose <args>
 command! FormatJson %! python -m json.tool
 command! -nargs=1 Notes :e ~/OneDrive - adesegha/notes/<args>.txt
@@ -93,7 +120,6 @@ command! Auto :e ~/OneDrive - adesegha/notes/automation.txt
 function! s:GoToShell()
 	if bufexists('shell')
 		buffer shell
-		startinsert
 	else
 		terminal
 		file shell
@@ -145,12 +171,20 @@ function! s:InitCodeFile()
 	endif
 endfunction
 
+function! s:NewWorkspace(rootFolder)
+	buffer shell
+	bd!
+	bufdo bd
+	execute 'cd ' . a:rootFolder
+	terminal
+	file shell
+endfunction
+
 function! s:Workspace(environment)
 	let environments = {
 				\ 'coursera': '/Volumes/Data/coursera/machine-learning',
-				\ 'nutrien': '/Volumes/Data/nutrien',
-				\ 'ulo-client': '/Volumes/Data/ulomobilespa-client',
-				\ 'ulo-server': '/Volumes/Data/ulomobilespa-server',
+				\ 'ulo-client': '~/dev/ulomobilespa-client',
+				\ 'ulo-server': '~/dev/ulomobilespa-server',
 				\ 'stoke-portal': '~/dev/stoke/portal',
 				\ 'stoke-api': '~/dev/stoke/api',
 				\ 'cm': '~/dev/central-market/cm-local-dev-environment/react-service/cm-react-service'
@@ -200,4 +234,30 @@ function! s:Workspace(environment)
 
 		buffer shell
 	endif
+endfunction
+
+function! s:Tests()
+  if bufexists('jest-tests')
+    buffer jest-tests
+  else
+    terminal
+    file jest-tests
+    call jobsend(b:terminal_job_id, "npm run test\n")
+  endif
+endfunction
+
+function! s:Dev()
+  terminal
+  file dev-server
+  call jobsend(b:terminal_job_id, "npm run dev\n")
+endfunction
+
+function! s:TerminalStartInsert()
+  if &buftype ==# 'terminal'
+    startinsert
+  endif
+endfunction
+
+function! s:TerminalStopInsert()
+  stopinsert
 endfunction
