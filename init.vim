@@ -24,7 +24,7 @@ call plug#begin(stdpath('data') . '/plugged')
 call plug#end()
 
 " fzf settings
-let $FZF_DEFAULT_COMMAND = 'rga --files --glob "!*node_module*" --glob "!*bin*" --glob "!*obj*" --glob "!*build*" --glob "!*packages*"'
+let $FZF_DEFAULT_COMMAND = 'rga --files --glob "!*node_modules/*" --glob "!*bin/*" --glob "!*obj/*" --glob "!*build/*" --glob "!*packages/*"'
 
 " neovim settings
 let mapleader = '-'
@@ -57,6 +57,7 @@ nmap <leader><space> :Buffers<cr>
 nmap <leader>e :Files<cr>
 nmap <leader>t :call <SID>GoToShell()<cr>
 nmap <space> :
+nmap ,t :call RunInTerminal("jest-tests", "watch-tests")<cr>
 
 " window navigation remappings
 nmap <c-h> <c-w><c-h>
@@ -108,7 +109,6 @@ augroup end
 
 command! -nargs=1 -complete=dir NewWorkspace call s:NewWorkspace("<args>")
 command! -nargs=1 Workspace call s:Workspace("<args>")
-command! Tests call s:Tests()
 command! Dev call s:Dev()
 command! -nargs=? Bd :BufClose <args>
 command! FormatJson %! python -m json.tool
@@ -171,85 +171,20 @@ function! s:InitCodeFile()
 	endif
 endfunction
 
-function! s:NewWorkspace(rootFolder)
-	buffer shell
-	bd!
-	bufdo bd
-	execute 'cd ' . a:rootFolder
-	terminal
-	file shell
-endfunction
-
-function! s:Workspace(environment)
-	let environments = {
-				\ 'coursera': '/Volumes/Data/coursera/machine-learning',
-				\ 'ulo-client': '~/dev/ulomobilespa-client',
-				\ 'ulo-server': '~/dev/ulomobilespa-server',
-				\ 'stoke-portal': '~/dev/stoke/portal',
-				\ 'stoke-api': '~/dev/stoke/api',
-				\ 'cm': '~/dev/central-market/cm-local-dev-environment/react-service/cm-react-service'
-				\ }
-
-	buffer shell
-	bd!
-	bufdo bd
-	execute 'cd ' . environments[a:environment]
-	terminal
-	file shell
-
-	if a:environment == 'ulo-client'
-		terminal
-		file react-scripts
-		call jobsend(b:terminal_job_id, "npm run start\n")
-	endif
-
-	if a:environment == 'ulo-server'
-		terminal
-		file mongodb
-		call jobsend(b:terminal_job_id, "npm run db\n")
-
-		terminal
-		file mongodb-client
-		call jobsend(b:terminal_job_id, "mongo\n")
-
-		terminal
-		file node-dev
-		call jobsend(b:terminal_job_id, "npm run start\n")
-	endif
-
-	if a:environment == 'stoke-portal'
-		terminal
-		file react-scripts
-		call jobsend(b:terminal_job_id, "npm run start\n")
-	endif
-
-	if a:environment == 'cm'
-		terminal
-		file docker-compose
-		call jobsend(b:terminal_job_id, "cd ~/dev/central-market/cm-local-dev-environment && docker-machine start; eval $(docker-machine env) && docker-compose up\n")
-
-		terminal
-		file react-service-local
-		call jobsend(b:terminal_job_id, "yarn start\n")
-
-		buffer shell
-	endif
-endfunction
-
 function! s:Tests()
   if bufexists('jest-tests')
     buffer jest-tests
   else
     terminal
     file jest-tests
-    call jobsend(b:terminal_job_id, "npm run test\n")
+    call jobsend(b:terminal_job_id, "yarn run test\n")
   endif
 endfunction
 
 function! s:Dev()
   terminal
   file dev-server
-  call jobsend(b:terminal_job_id, "npm run dev\n")
+  call jobsend(b:terminal_job_id, "yarn run dev\n")
 endfunction
 
 function! s:TerminalStartInsert()
@@ -261,3 +196,18 @@ endfunction
 function! s:TerminalStopInsert()
   stopinsert
 endfunction
+
+function! s:StartShell()
+  if bufexists('shell')
+    buffer shell
+  else
+    terminal
+    file shell
+  endif
+endfunction
+
+source ~/devtools/neovim/utilities.vim
+source ~/devtools/neovim/centralmarket.vim
+source ~/devtools/neovim/stoke.vim
+source ~/devtools/neovim/ulo.vim
+source ~/devtools/neovim/git.vim

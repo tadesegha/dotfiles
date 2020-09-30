@@ -14,15 +14,17 @@
   cm = commit -am
   d = diff
   f = fetch
+  fo = fetch origin
   l = log
   m = merge
   ms = merge --squash
   o = checkout
   ob = checkout -b
+  oo = checkout origin/master
   pl = pull
   ps = push
-  rs = reset
   rh = reset --hard
+  rs = reset
   rv = revert
   s = status
 [gpg]

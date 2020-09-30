@@ -1,5 +1,4 @@
 alias g=git
-alias package-spfx='gulp bundle --ship && gulp package-solution --ship'
 
 source ~/dotfiles/centralmarket
 source ~/dotfiles/zsh/prompt
@@ -12,7 +11,7 @@ alias rgi='rg --ignore-case'
 
 # docker aliases
 alias d='docker'
-alias dcl='docker container ls'
+alias dcl='docker-command docker container ls'
 alias dcla='docker container ls -a'
 alias dcs='docker container stop'
 alias db='docker build'
@@ -21,19 +20,28 @@ alias dcsa='docker container stop $(docker container ls -q)'
 alias dcra='docker container rm $(docker container ls -aq)'
 alias dira='docker image rm $(docker image ls -a)'
 
+# docker-compose aliases
 alias dcd='docker-compose down'
-alias dcu='docker-compose up'
+alias dcu='docker-command docker-compose $([[ -f docker-compose-local.yml ]] && echo "-f docker-compose-local.yml") up'
 
-alias dms='docker-machine start; eval $(docker-machine env)'
+# automation aliases
+alias ,r='run'
+alias ,rt='run-tests'
+alias ,t='watch-tests'
 
-# random aliases ... probably specific to mbp-16
-alias tsc=/Users/tlo/.nvm/versions/node/v10.21.0/bin/tsc
-alias firebase="`npm config get prefix`/bin/firebase"
+# docker functions
+function docker-command {
+  docker-machine start &> /dev/null; eval $(docker-machine env)
+  $@
+}
 
-export GOPATH=$HOME/go
-export GOROOT="$(brew --prefix golang)/libexec"
-export PATH="/usr/local/opt/node@12/bin:$PATH:${GOPATH}/bin:$HOME/devtools"
+# environment variables
 export EDITOR=nvim
+
+export PATH="$PATH:$HOME/devtools/automation"
+
+# random path ... probably specific to mbp-16
+export PATH="/usr/local/opt/node@12/bin:$PATH:${GOPATH}/bin"
 
 set -o vi
 

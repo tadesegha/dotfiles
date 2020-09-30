@@ -1,341 +1,215 @@
 require("hs.ipc")
 hs.ipc.cliInstall()
 
+choose = '/usr/local/bin/choose -c transparent'
+
 hs.hotkey.bind('alt', 'space', function()
-	hs.application.frontmostApplication():selectMenuItem({'Help'})
+  hs.application.frontmostApplication():selectMenuItem({'Help'})
 end)
 
 hs.hotkey.bind({'ctrl', 'alt', 'shift'}, 'space', function()
-	local currentWindow = hs.window.focusedWindow()
-	hs.focus()
-	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "what can I do you for?", '', 'OK', 'Cancel')
-	currentWindow:focus()
+  local commands = {
+    terminal = function() hs.application.launchOrFocus('iTerm2') end,
+    focusEditor = focusEditor,
+    devTools = devTools,
+    resizeWindow = resizeWindow,
+    reload = reload,
+    getPassword = getPassword
+  }
 
-	if isCancelled == 'Cancel' then return end
-
-	local commands = {
-		t = function() hs.application.launchOrFocus('iTerm2') end,
-		fe = focusEditor,
-		fb = focusBrowser,
-		dt = openDevTools,
-		rw = resizeWindow,
-		r = reload,
-		a = applicationMode
-	}
-
-	for key, value in pairs(commands) do
-		if response == key then value() end
-	end
+  local choice = getChoice(commands)
+  for key, value in pairs(commands) do
+    if choice == key then value() end
+  end
 end)
 
-function applicationMode()
-	hs.alert.show('application mode')
-	local isCancelled, response = hs.dialog.textPrompt("hammerspoon", "application mode", '', 'OK', 'Cancel')
-	if isCancelled == 'Cancel' then return end
+function getPassword()
+  local success = hs.execute('pass -c $(ls ~/.password-store | grep gpg | cut -d "." -f 1 | ' .. choose .. ')', true)
+  hs.alert.show('password copied to clipboard')
+end
 
-	local commands = {
-		b = function() hs.application.launchOrFocus('Brave') end
-	}
+function getChoice(choices)
+  local commands = ''
+  for key in pairs(choices) do commands = commands .. '\\\\n' .. key end
+  return hs.execute('echo ' .. commands .. '| ' .. choose)
+end
 
-	for key, value in pairs(commands) do
-		if response == key then value() end
-	end
+function getKeyboardInput(message)
+  local currentWindow = hs.window.focusedWindow()
+  hs.focus()
+  local isCancelled, response = hs.dialog.textPrompt("hammerspoon", message, '', 'OK', 'Cancel')
+
+  if isCancelled == 'Cancel' then
+    currentWindow:focus()
+    return
+  end
+
+  return currentWindow, response
 end
 
 function reload()
-	hs.reload()
-	hs.alert.show('Config loaded')
+  hs.reload()
+  hs.alert.show('Config loaded')
 end
 
 function resizeWindow()
-	local currentWindow = hs.window.focusedWindow()
+  local currentWindow = hs.window.focusedWindow()
 
-	hs.focus()
-	local btnSelected, response = hs.dialog.textPrompt("resize window", "enter unit dimensions (x, dx, y, dy)", '', 'OK', 'Cancel')
-	if btnSelected == 'Cancel' then return end
+  hs.focus()
+  local btnSelected, response = hs.dialog.textPrompt("resize window", "enter unit dimensions (x, dx, y, dy)", '', 'OK', 'Cancel')
+  if btnSelected == 'Cancel' then return end
 
-	currentWindow:focus()
-	local components = split(response, ",")
-	local x = tonumber(components[1]) or 0
-	local dx = tonumber(components[2]) or (10 - (10 * x))
-	local y = tonumber(components[3]) or 0
-	local dy = tonumber(components[4]) or (10 - (10 * y))
+  currentWindow:focus()
+  local components = split(response, ",")
+  local x = tonumber(components[1]) or 0
+  local dx = tonumber(components[2]) or (10 - (10 * x))
+  local y = tonumber(components[3]) or 0
+  local dy = tonumber(components[4]) or (10 - (10 * y))
 
   dx = (dx - x) / 10
   x = x / 10
   dy = (dy - y) / 10
   y = y / 10
-	currentWindow:moveToUnit(hs.geometry.rect(x, y, dx, dy))
+  currentWindow:moveToUnit(hs.geometry.rect(x, y, dx, dy))
 end
 
 function split(str, delimiter)
-	result = {};
-	for match in (str..delimiter):gmatch("(.-)"..delimiter) do
-		table.insert(result, match)
-	end
-	return result
+  result = {};
+  for match in (str..delimiter):gmatch("(.-)"..delimiter) do
+    table.insert(result, match)
+  end
+  return result
 end
 
 function showDialog(message)
-	hs.dialog.blockAlert('hammerspoon', message)
+  hs.dialog.blockAlert('hammerspoon', message)
 end
 
-function resizeChromeWindow()
-	local currentWindow = hs.window.focusedWindow()
-	local screen = hs.screen.mainScreen()
-	local frame = currentWindow:frame()
-	local unitFrame = screen:toUnitRect(frame)
-	if unitFrame.h ~= 1 then return unitFrame end
-
-	unitFrame.h = unitFrame.h - 0.2
-	currentWindow:moveToUnit(unitFrame)
-	return unitFrame
-end
-
-function openDevTools()
-	hs.application.frontmostApplication():selectMenuItem({'View', 'Developer', 'JavaScript Console'})
-end
-
-function positionChromeDevTools(frame)
-	if waitingForWindow('DevTools', function() positionChromeDevTools(frame) end) then return end
-	frame.y = frame.y + frame.h
-	frame.h = 0.2
-	hs.window.find('DevTools'):moveToUnit(frame)
+function devTools()
+  hs.application.frontmostApplication():selectMenuItem({'View', 'Developer', 'JavaScript Console'})
 end
 
 function isExpectedScreen() 
-	local screen = hs.screen.mainScreen():name()
-	if screen == 'LG Ultra HD' then return true end
-
-	hs.dialog.blockAlert("hammerspoon", "I'm not sure how to set up on this display")
-	return false
+  local screen = hs.screen.mainScreen():name()
+  if screen == 'LG Ultra HD' then return true end
+  hs.dialog.blockAlert("hammerspoon", "I'm not sure how to set up on this display")
+  return false
 end
 
 function waitingForWindow(title, func)
-	if hs.window.find(title) then return end
-	hs.timer.delayed.new(0.5, func):start()
-	return true
+  if hs.window.find(title) then return end
+  hs.timer.delayed.new(0.5, func):start()
+  return true
 end
 
 function focusEditor()
-	if not isExpectedScreen() then return end
-
-	hs.application.launchOrFocus('Brave Browser')
-	if waitingForWindow('Brave', focusEditor) then return end
-
-	hs.layout.apply({
-		{"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
-		{"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.6, h = 1}, nil, nil},
-	})
-end
-
-function focusBrowser()
-	if not isExpectedScreen() then return end
-
-	hs.application.launchOrFocus('Brave Browser')
-	if waitingForWindow('Brave', focusBrowser) then return end
-
-	hs.layout.apply({
-		{"Brave Browser", nil, nil, {x = 0.3, y = 0, w = 0.4, h = 1}, nil, nil},
-		{"iTerm2", nil, nil, {x = 0, y = 0, w = 0.3, h = 1}, nil, nil},
-		{"Microsoft Teams", nil, nil, {x = 0.7, y = 0.5, w = 0.3, h = 0.5}, nil, nil},
-		{"Slack", nil, nil, {x = 0.7, y = 0, w = 0.3, h = 0.5}, nil, nil},
-	})
+  if not isExpectedScreen() then return end
+  hs.layout.apply({
+    {"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
+    {"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.6, h = 1}, nil, nil},
+  })
 end
 
 hs.window.filter.new('Brave Browser')
-	:subscribe(hs.window.filter.windowFocused, function()
-		if braveModal then return true end
+  :subscribe(hs.window.filter.windowFocused, function()
+    if braveModal then return true end
 
-		braveBindings = {
-			hs.hotkey.bind('cmd', '1', function()
-				hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'T-Lo' })
-			end),
+    braveBindings = {
+      hs.hotkey.bind('cmd', '1', function()
+        hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Default' })
+      end),
 
-			hs.hotkey.bind('cmd', '2', function()
-				hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Nutrien' })
-			end),
+      hs.hotkey.bind('cmd', '2', function()
+        hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Central Market' })
+      end),
 
-			hs.hotkey.bind('cmd', '3', function()
-				hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Nutrien Admin' })
-			end),
-
-			hs.hotkey.bind('cmd', '4', function()
-				hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Stoke' })
-			end)
-		}
-	end)
-	:subscribe(hs.window.filter.windowUnfocused, function()
-		for key, binding in pairs(braveBindings) do binding:delete() end
-	end)
+      hs.hotkey.bind('cmd', '3', function()
+        hs.application.frontmostApplication():selectMenuItem({ 'Profiles', 'Stoke' })
+      end),
+    }
+  end)
+  :subscribe(hs.window.filter.windowUnfocused, function()
+    for key, binding in pairs(braveBindings) do binding:delete() end
+  end)
 
 hs.window.filter.new('Google Chrome')
-	:subscribe(hs.window.filter.windowFocused, function()
-		if chromeModal then return true end
+  :subscribe(hs.window.filter.windowFocused, function()
+    if chromeModal then return true end
 
-		chromeBindings = {
-			hs.hotkey.bind('cmd', '1', function()
-				hs.application.frontmostApplication():selectMenuItem({ 'People', 'T-Lo' })
-			end),
+    chromeBindings = {
+      hs.hotkey.bind('cmd', '1', function()
+        hs.application.frontmostApplication():selectMenuItem({ 'People', 'T-Lo' })
+      end),
 
-			hs.hotkey.bind('cmd', '2', function()
-				hs.application.frontmostApplication():selectMenuItem({ 'People', 'Nutrien' })
-			end),
+      hs.hotkey.bind('cmd', '2', function()
+        hs.application.frontmostApplication():selectMenuItem({ 'People', 'Nutrien' })
+      end),
 
-			hs.hotkey.bind('cmd', '3', function()
-				hs.application.frontmostApplication():selectMenuItem({ 'People', 'Nutrien Admin' })
-			end),
+      hs.hotkey.bind('cmd', '3', function()
+        hs.application.frontmostApplication():selectMenuItem({ 'People', 'Nutrien Admin' })
+      end),
 
-			hs.hotkey.bind('cmd', '4', function()
-				hs.application.frontmostApplication():selectMenuItem({ 'People', 'Tolu (Stoke)' })
-			end)
-		}
+      hs.hotkey.bind('cmd', '4', function()
+        hs.application.frontmostApplication():selectMenuItem({ 'People', 'Tolu (Stoke)' })
+      end)
+    }
 
-		chromeModal = hs.hotkey.modal.new({'ctrl', 'alt', 'cmd'}, 'space')
+    chromeModal = hs.hotkey.modal.new({'ctrl', 'alt', 'cmd'}, 'space')
 
-		chromeModal:bind('', 'c', function()
-			chromeModal:exit()
-			local chrome = hs.appfinder.appFromName('Google Chrome')
-			chrome:selectMenuItem({ 'View', 'Developer', 'JavaScript Console' })
-		end)
+    chromeModal:bind('', 'c', function()
+      chromeModal:exit()
+      local chrome = hs.appfinder.appFromName('Google Chrome')
+      chrome:selectMenuItem({ 'View', 'Developer', 'JavaScript Console' })
+    end)
 
-		chromeModal:bind('', 'p', function()
-			chromeModal:exit()
+    chromeModal:bind('', 'p', function()
+      chromeModal:exit()
 
-			function deleteModalBindings()
-				for i, binding in pairs(chromeModalBindings) do binding:delete() end
-			end
+      function deleteModalBindings()
+        for i, binding in pairs(chromeModalBindings) do binding:delete() end
+      end
 
-			function selectChromeMenu(option)
-				hs.appfinder.appFromName('Google Chrome'):selectMenuItem(option)
-			end
+      function selectChromeMenu(option)
+        hs.appfinder.appFromName('Google Chrome'):selectMenuItem(option)
+      end
 
-			chromeModalBindings = {
-				hs.hotkey.bind('', 'escape', function()
-					deleteModalBindings()
-				end),
+      chromeModalBindings = {
+        hs.hotkey.bind('', 'escape', function()
+          deleteModalBindings()
+        end),
 
-				hs.hotkey.bind('', 'a', function()
-					deleteModalBindings()
-					selectChromeMenu({'People', 'Nutrien Admin'})
-				end),
+        hs.hotkey.bind('', 'a', function()
+          deleteModalBindings()
+          selectChromeMenu({'People', 'Nutrien Admin'})
+        end),
 
-				hs.hotkey.bind('', 'd', function()
-					deleteModalBindings()
-					selectChromeMenu({'People', 'Nutrien Dev'})
-				end),
+        hs.hotkey.bind('', 'd', function()
+          deleteModalBindings()
+          selectChromeMenu({'People', 'Nutrien Dev'})
+        end),
 
-				hs.hotkey.bind('', 'n', function()
-					deleteModalBindings()
-					selectChromeMenu({'People', 'Nutrien'})
-				end),
+        hs.hotkey.bind('', 'n', function()
+          deleteModalBindings()
+          selectChromeMenu({'People', 'Nutrien'})
+        end),
 
-				hs.hotkey.bind('', 't', function()
-					deleteModalBindings()
-					selectChromeMenu({'People', 'T-Lo'})
-				end)
-			}
-		end)
+        hs.hotkey.bind('', 't', function()
+          deleteModalBindings()
+          selectChromeMenu({'People', 'T-Lo'})
+        end)
+      }
+    end)
 
-		chromeModal:bind('', 'escape', function()
-			chromeModal:exit()
-		end)
-	end)
-	:subscribe(hs.window.filter.windowUnfocused, function()
-		chromeModal:delete()
-		chromeModal = nil
+    chromeModal:bind('', 'escape', function()
+      chromeModal:exit()
+    end)
+  end)
+  :subscribe(hs.window.filter.windowUnfocused, function()
+    chromeModal:delete()
+    chromeModal = nil
 
-		for key, binding in pairs(chromeBindings) do binding:delete() end
-	end)
-
-hs.window.filter.new('Mail')
-	:subscribe(hs.window.filter.windowFocused, function()
-		if mailModal then return true end
-
-		mailHotkeys = {
-			hs.hotkey.bind('cmd', 'return', function()
-				mail:selectMenuItem({'Message', 'Send'})
-			end)
-		}
-
-		mailModal = hs.hotkey.modal.new({'ctrl', 'alt', 'cmd'}, 'space')
-		mail = hs.appfinder.appFromName('Mail')
-
-		mailModal:bind('', 'a', function()
-			mailModal:exit()
-			mail:selectMenuItem({'Message', 'Archive'})
-		end)
-
-		mailModal:bind('', 'escape', function()
-			mailModal:exit()
-		end)
-	end)
-	:subscribe(hs.window.filter.windowUnfocused, function()
-		mailModal:delete()
-		mailModal = nil
-		mail = nil
-
-		for i, hotkey in ipairs(mailHotkeys) do hotkey:delete() end
-	end)
-
-hs.window.filter.new('Microsoft Outlook')
-	:subscribe(hs.window.filter.windowFocused, function()
-		if outlookModal then return true end
-
-		outlookModal = hs.hotkey.modal.new({'ctrl', 'alt', 'cmd'}, 'space')
-		outlook = hs.appfinder.appFromName('Microsoft Outlook')
-
-		local commands = { }
-		commands['l'] = {'Draft', 'Send Later...'}
-		commands['/'] = {'Edit', 'Find', 'Outlook Items Search'}
-		commands['n'] = {'View', 'Next Pane'}
-		commands['f'] = {'Message', 'Forward'}
-
-		for key, command in pairs(commands) do
-			outlookModal:bind('', key, function()
-				outlookModal:exit()
-				outlook:selectMenuItem(command)
-			end)
-		end
-
-		outlookModal:bind('', 'escape', function()
-			outlookModal:exit()
-		end)
-	end)
-	:subscribe(hs.window.filter.windowUnfocused, function()
-		outlookModal:delete()
-		outlookModal = nil
-		outlook = nil
-	end)
-
-hs.window.filter.new('iTerm')
-	:subscribe(hs.window.filter.windowFocused, function()
-		if iTerm2Modal then return true end
-
-		iTerm2Modal = hs.hotkey.modal.new({'ctrl', 'alt', 'cmd'}, 'space')
-
-		iTerm2Modal:bind('', 'escape', function()
-			iTerm2Modal:exit()
-		end)
-
-		iTerm2Modal:bind('', 'r', function()
-			iTerm2Modal:exit()
-
-			local iTerm2 = hs.application.frontmostApplication()
-
-			local chrome = hs.appfinder.appFromName('Google Chrome')
-			chrome:activate()
-			hs.eventtap.keyStroke("cmd", "r")
-
-			iTerm2:activate()
-		end)
-	end)
-	:subscribe(hs.window.filter.windowUnfocused, function()
-		if iTerm2Modal then
-			iTerm2Modal:delete()
-			iTerm2Modal = nil
-		end
-	end)
+    for key, binding in pairs(chromeBindings) do binding:delete() end
+  end)
 
 hs.ipc.cliInstall()
 hs.alert.show('Config loaded')
