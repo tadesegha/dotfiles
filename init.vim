@@ -14,7 +14,7 @@ vmap k <nop>
 vmap l <nop>
 
 call plug#begin(stdpath('data') . '/plugged')
-	Plug 'junegunn/fzf'
+	Plug 'junegunn/fzf', { 'do': { -> fzf#install() }}
 	Plug 'junegunn/fzf.vim'
 	Plug 'neoclide/coc.nvim', { 'branch': 'release'}
 	Plug 'leafgarland/typescript-vim'
@@ -56,6 +56,7 @@ nmap <leader><leader> <c-^>
 nmap <leader><space> :Buffers<cr>
 nmap <leader>e :Files<cr>
 nmap <leader>t :call <SID>GoToShell()<cr>
+nmap <leader>vc :e $MYVIMRC<cr>
 nmap <space> :
 nmap ,t :call RunInTerminal("jest-tests", "watch-tests")<cr>
 
@@ -64,7 +65,7 @@ nmap <c-h> <c-w><c-h>
 nmap <c-t> <c-w><c-j>
 nmap <c-n> <c-w><c-k>
 nmap <c-s> <c-w><c-l>
-tnoremap ;; <c-\><c-n>
+tnoremap <c-d> <c-\><c-n>
 tnoremap <c-h> <c-\><c-n><c-w><c-h>
 tnoremap <c-t> <c-\><c-n><c-w><c-j>
 tnoremap <c-n> <c-\><c-n><c-w><c-k>
@@ -86,13 +87,12 @@ nmap <localleader>n <Plug>(coc-diagnostic-next)
 nmap <localleader>p <Plug>(coc-diagnostic-previous)
 nmap <localleader>r <Plug>(coc-rename)
 nmap <localleader><space> <Plug>(coc-fix-current)
-nmap <localleader>a :CocAction<cr>
-nmap <localleader>f :call CocAction('format')<cr>
+nmap <localleader>a <Plug>(coc-codeaction-selected)<cr>
 inoremap <silent><expr> <c-a> coc#refresh()
 
 augroup Coc
   autocmd!
-  " autocmd BufLeave *.js,*.jsx,*.tsx,*.ts,*.html :call CocAction('format')
+  autocmd BufWritePre *.js,*.jsx,*.tsx,*.ts,*.html :call CocAction('format')
   autocmd BufEnter *.js,*.jsx,*.tsx,*.ts,*.html :call s:TabsAndSpaces()
 augroup end
 
@@ -105,6 +105,11 @@ augroup end
 augroup TxtFiles
 	autocmd!
 	autocmd BufEnter *.txt nmap <buffer> <localleader>- r<c-v>u2713
+augroup end
+
+augroup VimConfig
+  autocmd!
+  autocmd BufWritePost ~/.config/nvim/init.vim :source %
 augroup end
 
 command! -nargs=1 -complete=dir NewWorkspace call s:NewWorkspace("<args>")
@@ -206,8 +211,9 @@ function! s:StartShell()
   endif
 endfunction
 
-source ~/devtools/neovim/utilities.vim
-source ~/devtools/neovim/centralmarket.vim
-source ~/devtools/neovim/stoke.vim
-source ~/devtools/neovim/ulo.vim
-source ~/devtools/neovim/git.vim
+source ~/tools/neovim/utilities.vim
+source ~/tools/neovim/centralmarket.vim
+source ~/tools/neovim/joevs.vim
+source ~/tools/neovim/stoke.vim
+source ~/tools/neovim/ulo.vim
+source ~/tools/neovim/git.vim

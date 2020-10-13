@@ -9,29 +9,53 @@ end)
 
 hs.hotkey.bind({'ctrl', 'alt', 'shift'}, 'space', function()
   local commands = {
-    terminal = function() hs.application.launchOrFocus('iTerm2') end,
-    focusEditor = focusEditor,
-    devTools = devTools,
-    resizeWindow = resizeWindow,
-    reload = reload,
-    getPassword = getPassword
+    ['dev-tools'] = devTools,
+    ['focus-editor'] = focusEditor,
+    ['get-password'] = getPassword,
+    ['position-window'] = positionWindow,
+    ['reload'] = reload,
+    ['resize-window'] = resizeWindow,
+    ['terminal'] = function() hs.application.launchOrFocus('iTerm2') end,
+    ['open-bookmark'] = openBookmark
   }
 
-  local choice = getChoice(commands)
-  for key, value in pairs(commands) do
-    if choice == key then value() end
-  end
+  local _, action = getChoice(commands)
+  action()
 end)
 
+function openBookmark()
+  local bookmarks = {
+    ['stoke-wireframe'] = 'https://xd.adobe.com/view/14581303-8c3c-481b-87f4-ca25f70f9ed0-410b/screen/4cb672de-328b-4e50-8d31-366106fd0989'
+  }
+
+  local _, action = getChoice(bookmarks);
+  hs.execute('open ' .. action)
+end
+
+function positionWindow()
+  local positions = {
+    ['top-left'] = "0, 5, 0, 5"
+  }
+  local choice = getChoice(positions);
+  setWindowPosition(positions[choice]);
+end
+
 function getPassword()
-  local success = hs.execute('pass -c $(ls ~/.password-store | grep gpg | cut -d "." -f 1 | ' .. choose .. ')', true)
+  hs.execute('pass -c $(ls -R ~/.password-store | grep gpg | cut -d "." -f 1 | ' .. choose .. ')', true)
   hs.alert.show('password copied to clipboard')
 end
 
 function getChoice(choices)
   local commands = ''
   for key in pairs(choices) do commands = commands .. '\\\\n' .. key end
-  return hs.execute('echo ' .. commands .. '| ' .. choose)
+  local choice = hs.execute('echo ' .. commands .. '| ' .. choose)
+
+  local action
+  for key, value in pairs(choices) do
+    if choice == key then action = value end
+  end
+
+  return choice, action
 end
 
 function getKeyboardInput(message)
@@ -59,17 +83,23 @@ function resizeWindow()
   local btnSelected, response = hs.dialog.textPrompt("resize window", "enter unit dimensions (x, dx, y, dy)", '', 'OK', 'Cancel')
   if btnSelected == 'Cancel' then return end
 
-  currentWindow:focus()
-  local components = split(response, ",")
-  local x = tonumber(components[1]) or 0
-  local dx = tonumber(components[2]) or (10 - (10 * x))
-  local y = tonumber(components[3]) or 0
-  local dy = tonumber(components[4]) or (10 - (10 * y))
+  currentWindow:focus();
+  setWindowPosition(response);
+end
 
-  dx = (dx - x) / 10
+function setWindowPosition(position)
+  local currentWindow = hs.window.focusedWindow()
+  local components = split(position, ",")
+  local x = tonumber(components[1]) or 0
+  local dx = tonumber(components[2]) or (10 - x)
+  local y = tonumber(components[3]) or 0
+  local dy = tonumber(components[4]) or (10 - y)
+
+  dx = dx / 10
   x = x / 10
-  dy = (dy - y) / 10
+  dy = dy / 10
   y = y / 10
+
   currentWindow:moveToUnit(hs.geometry.rect(x, y, dx, dy))
 end
 
@@ -105,8 +135,8 @@ end
 function focusEditor()
   if not isExpectedScreen() then return end
   hs.layout.apply({
-    {"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
-    {"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.6, h = 1}, nil, nil},
+    {"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 0.5}, nil, nil},
+    {"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.6, h = 0.5}, nil, nil},
   })
 end
 

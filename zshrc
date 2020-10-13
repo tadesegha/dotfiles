@@ -21,7 +21,7 @@ alias dcra='docker container rm $(docker container ls -aq)'
 alias dira='docker image rm $(docker image ls -a)'
 
 # docker-compose aliases
-alias dcd='docker-compose down'
+alias dcd='docker-command docker-compose $([[ -f docker-compose-local.yml ]] && echo "-f docker-compose-local.yml") down'
 alias dcu='docker-command docker-compose $([[ -f docker-compose-local.yml ]] && echo "-f docker-compose-local.yml") up'
 
 # automation aliases
