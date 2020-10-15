@@ -58,7 +58,8 @@ nmap <leader>e :Files<cr>
 nmap <leader>t :call <SID>GoToShell()<cr>
 nmap <leader>vc :e $MYVIMRC<cr>
 nmap <space> :
-nmap ,t :call RunInTerminal("jest-tests", "watch-tests")<cr>
+nmap <leader>wt :call RunInTerminal("jest-tests", "watch-tests")<cr>
+nmap <leader>rd :call RunInTerminal("dev-server", "run-dev")<cr>
 
 " window navigation remappings
 nmap <c-h> <c-w><c-h>
@@ -121,6 +122,7 @@ command! -nargs=1 Notes :e ~/OneDrive - adesegha/notes/<args>.txt
 command! Todo :e ~/OneDrive - adesegha/notes/todo.txt
 command! Inbox :e ~/OneDrive - adesegha/notes/inbox.txt
 command! Auto :e ~/OneDrive - adesegha/notes/automation.txt
+command! Quit call s:Quit()
 
 function! s:GoToShell()
 	if bufexists('shell')
@@ -209,6 +211,10 @@ function! s:StartShell()
     terminal
     file shell
   endif
+endfunction
+
+function! s:Quit()
+  bufdo bd
 endfunction
 
 source ~/tools/neovim/utilities.vim
