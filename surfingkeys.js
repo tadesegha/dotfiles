@@ -1,7 +1,25 @@
-// an example to create a new mapping `ctrl-y`
-mapkey("<Ctrl-y>", "Show me the money", function () {
-  Front.showPopup("a well-known phrase uttered by characters in the 1996 film Jerry Maguire (Escape to close).");
+// mappings
+map("H", "S"); // go back in history (navigation)
+map("S", "D"); // go forward in history (navigation)
+map("<Ctrl-h>", "E");
+map("<Ctrl-s>", "R");
+
+// open url mappings
+map("oc", "go");
+map("ob", "gf");
+map("ot", "af");
+
+// buffer mappings
+unmap("b");
+map("bd", "x");
+
+// custom mappings
+mapkey("R", "#4Hard reload the page", function () {
+  RUNTIME("reloadTab", { nocache: true });
 });
+
+// settings
+Hints.numericHints = true;
 
 // an example to replace `T` with `gt`, click `Default mappings` to see how `T` works.
 map("gt", "T");

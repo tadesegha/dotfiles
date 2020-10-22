@@ -58,7 +58,7 @@ nmap <leader>e :Files<cr>
 nmap <leader>t :call <SID>GoToShell()<cr>
 nmap <leader>vc :e $MYVIMRC<cr>
 nmap <space> :
-nmap <leader>wt :call RunInTerminal("jest-tests", "watch-tests")<cr>
+nmap <leader>rt :call RunInTerminal("jest-tests", "watch-tests")<cr>
 nmap <leader>rd :call RunInTerminal("dev-server", "run-dev")<cr>
 
 " window navigation remappings

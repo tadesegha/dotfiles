@@ -53,7 +53,7 @@ function merge {
     return
   fi
 
-  rebase && git -c advice.detachedHead=false checkout origin/develop && git merge --squash - && git commit -m $1 && git push origin HEAD:develop && git branch -f @{-1} && git checkout -
+  rebase && yarn test && git -c advice.detachedHead=false checkout origin/develop && git merge --squash - && git commit -m $1 && git push origin HEAD:develop && git branch -f @{-1} && git checkout -
 }
 
 # Load Git completion
