@@ -7,7 +7,9 @@ directory=$(dirname $0)
     ln -s $directory/hammerspoonrc ~/.hammerspoon/init.lua
 
 # install victor-mono font
-brew tap homebrew/cask-fonts && \ brew cask install font-victor-mono
+brew tap homebrew/cask-fonts && \
+  brew cask install font-victor-mono && \
+  brew install font-camingocode
 
 # setup git completion
 mkdir -p ~/.zsh && cd ~/.zsh && \

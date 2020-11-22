@@ -21,6 +21,7 @@ call plug#begin(stdpath('data') . '/plugged')
 	Plug 'peitalin/vim-jsx-typescript'
 	Plug 'vim-scripts/BufClose.vim'
 	Plug 'sirver/ultisnips'
+  Plug 'ParamagicDev/vim-medic_chalk'
 call plug#end()
 
 " fzf settings
@@ -50,7 +51,8 @@ set timeoutlen=300
 set guicursor=
 syntax on
 
-highlight PMenu ctermbg=black ctermfg=white
+" highlight PMenu ctermbg=black ctermfg=white
+colorscheme medic_chalk
 
 nmap <leader><leader> <c-^>
 nmap <leader><space> :Buffers<cr>
@@ -219,7 +221,6 @@ endfunction
 
 source ~/tools/neovim/utilities.vim
 source ~/tools/neovim/centralmarket.vim
-source ~/tools/neovim/joevs.vim
 source ~/tools/neovim/stoke.vim
 source ~/tools/neovim/ulo.vim
 source ~/tools/neovim/git.vim

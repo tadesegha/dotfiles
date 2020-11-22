@@ -128,8 +128,8 @@ end
 
 function focusEditor()
   hs.layout.apply({
-    {"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 0.75}, nil, nil},
-    {"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.6, h = 1}, nil, nil},
+    {"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
+    {"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.6, h = 0.6}, nil, nil},
   })
 end
 

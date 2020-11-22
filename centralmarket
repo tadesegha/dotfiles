@@ -2,6 +2,7 @@ alias cm="cd ~/dev/central-market"
 alias cmwp="cd ~/dev/central-market/wordpress/centralmarket.com/html"
 alias cmrs="cd ~/dev/central-market/react-service"
 alias cm-connect-container="docker-command docker exec -it centralmarket.com bash"
+alias rdcli="~/.config/yarn/global/node_modules/.bin/rdcli"
 
 function cm-mr() {
   branch=$(g b | grep '*' | cut -d ' ' -f 2) && \

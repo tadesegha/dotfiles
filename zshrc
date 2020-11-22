@@ -9,7 +9,7 @@ alias d='docker'
 alias dcl='docker-command docker container ls'
 alias dcla='docker container ls -a'
 alias dcs='docker container stop'
-alias db='docker build'
+alias db='docker-command docker build'
 alias dpl='docker pull'
 alias dcsa='docker container stop $(docker container ls -q)'
 alias dcra='docker container rm $(docker container ls -aq)'
@@ -53,7 +53,7 @@ function merge {
     return
   fi
 
-  rebase && yarn test && git -c advice.detachedHead=false checkout origin/develop && git merge --squash - && git commit -m $1 && git push origin HEAD:develop && git branch -f @{-1} && git checkout -
+  rebase && yarn test && git -c advice.detachedHead=false checkout origin/develop && git merge --squash - && git commit -m $1 && git push origin HEAD:develop && git branch -f @{-1} && git checkout - && yarn lint
 }
 
 # Load Git completion
