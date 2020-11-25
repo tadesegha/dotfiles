@@ -43,7 +43,7 @@ end
 
 function getPassword()
   hs.execute('pass -c $(ls -R ~/.password-store | grep gpg | cut -d "." -f 1 | ' .. choose .. ')', true)
-  hs.alert.show('password copied to clipboard')
+  hs.application.frontmostApplication():selectMenuItem({'Edit', 'Paste'});
 end
 
 function getChoice(choices)
