@@ -14,7 +14,6 @@ function userCommands()
     ['focus-editor'] = focusEditor,
     ['get-password'] = getPassword,
     ['reload'] = reload,
-    ['terminal'] = function() hs.application.launchOrFocus('iTerm2') end,
     ['open-bookmark'] = openBookmark
   }
   performCommand(commands)
@@ -26,7 +25,8 @@ function windowCommands()
   local commands = {
     ['resize'] = resizeWindow,
     ['position'] = positionWindow,
-    ['span-column'] = spanWindow,
+    ['span-column'] = function() spanWindow('column') end,
+    ['span-row'] = function() spanWindow('row') end,
   }
   performCommand(commands)
 end
@@ -59,12 +59,14 @@ function positionWindow()
   setWindowPosition(positions[choice]);
 end
 
-function spanWindow()
-  local window, numColumns = getKeyboardInput('number of columns')
+function spanWindow(dimension)
+  local window, input = getKeyboardInput('number of ' .. dimension)
   window:focus()
 
   local frame = window:frame()
-  local position = hs.geometry.new(frame.x, frame.y, numColumns * frame.w, frame.h)
+  local position;
+  if dimension == 'column' then position = hs.geometry.new(frame.x, frame.y, input * frame.w, frame.h) end
+  if dimension == 'row' then position = hs.geometry.new(frame.x, frame.y, frame.w, input * frame.h) end
   window:setFrame(position);
 end
 
