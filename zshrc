@@ -21,7 +21,8 @@ alias dcu='docker-command docker-compose $([[ -f docker-compose-local.yml ]] && 
 
 # docker functions
 function docker-command {
-  docker-machine start &> /dev/null; eval $(docker-machine env)
+  docker-machine start &> /dev/null
+  eval $(docker-machine env)
   $@
 }
 

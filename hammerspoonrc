@@ -7,21 +7,33 @@ hs.hotkey.bind('alt', 'space', function()
   hs.application.frontmostApplication():selectMenuItem({'Help'})
 end)
 
-hs.hotkey.bind({'ctrl', 'alt', 'shift'}, 'space', function()
+function userCommands()
   local commands = {
+    ['window'] = windowCommands,
     ['dev-tools'] = devTools,
     ['focus-editor'] = focusEditor,
     ['get-password'] = getPassword,
-    ['position-window'] = positionWindow,
     ['reload'] = reload,
-    ['resize-window'] = resizeWindow,
     ['terminal'] = function() hs.application.launchOrFocus('iTerm2') end,
     ['open-bookmark'] = openBookmark
   }
+  performCommand(commands)
+end
 
+hs.hotkey.bind({'ctrl', 'alt', 'shift'}, 'space', userCommands)
+
+function windowCommands()
+  local commands = {
+    ['resize'] = resizeWindow,
+    ['position'] = positionWindow,
+  }
+  performCommand(commands)
+end
+
+function performCommand(commands)
   local _, action = getChoice(commands)
   action()
-end)
+end
 
 function openBookmark()
   local bookmarks = {
@@ -35,7 +47,12 @@ end
 
 function positionWindow()
   local positions = {
-    ['top-left'] = "0, 5, 0, 5"
+    ['bottom-left'] = "0, 3.33, 5, ",
+    ['bottom-middle'] = "3.33, 3.33, 5, ",
+    ['bottom-right'] = "6.66, , 5, ",
+    ['top-left'] = "0, 3.33, 0, 5",
+    ['top-middle'] = "3.33, 3.33, 0, 5",
+    ['top-right'] = "6.66, , 0, 5",
   }
   local choice = getChoice(positions);
   setWindowPosition(positions[choice]);

@@ -1,8 +1,4 @@
-" help ctrl-w
-" |CTRL-W__|  CTRL-W _	 set current window height to N (default: very
-" high)
-"
-" ✓ - ^KOK
+" ✓ - '<mapleader>-' in a text file
 
 nmap h <nop>
 nmap j <nop>
