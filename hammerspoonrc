@@ -26,6 +26,7 @@ function windowCommands()
   local commands = {
     ['resize'] = resizeWindow,
     ['position'] = positionWindow,
+    ['span-column'] = spanWindow,
   }
   performCommand(commands)
 end
@@ -56,6 +57,15 @@ function positionWindow()
   }
   local choice = getChoice(positions);
   setWindowPosition(positions[choice]);
+end
+
+function spanWindow()
+  local window, numColumns = getKeyboardInput('number of columns')
+  window:focus()
+
+  local frame = window:frame()
+  local position = hs.geometry.new(frame.x, frame.y, numColumns * frame.w, frame.h)
+  window:setFrame(position);
 end
 
 function getPassword()
