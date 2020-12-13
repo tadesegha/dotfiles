@@ -3,6 +3,15 @@ hs.ipc.cliInstall()
 
 choose = '/usr/local/bin/choose -c transparent'
 
+windowPositions = {
+  ['bottom-left'] = "0, 3.33, 6, ",
+  ['bottom-middle'] = "3.33, 3.33, 6, ",
+  ['bottom-right'] = "6.66, , 6, ",
+  ['top-left'] = "0, 3.33, 0, 6",
+  ['top-middle'] = "3.33, 3.33, 0, 6",
+  ['top-right'] = "6.66, , 0, 6",
+}
+
 hs.hotkey.bind('alt', 'space', function()
   hs.application.frontmostApplication():selectMenuItem({'Help'})
 end)
@@ -14,7 +23,8 @@ function userCommands()
     ['focus-editor'] = focusEditor,
     ['get-password'] = getPassword,
     ['reload'] = reload,
-    ['open-bookmark'] = openBookmark
+    ['open-bookmark'] = openBookmark,
+    ['start-work'] = startWork
   }
   performCommand(commands)
 end
@@ -46,17 +56,37 @@ function openBookmark()
   hs.execute('open ' .. action)
 end
 
-function positionWindow()
-  local positions = {
-    ['bottom-left'] = "0, 3.33, 5, ",
-    ['bottom-middle'] = "3.33, 3.33, 5, ",
-    ['bottom-right'] = "6.66, , 5, ",
-    ['top-left'] = "0, 3.33, 0, 5",
-    ['top-middle'] = "3.33, 3.33, 0, 5",
-    ['top-right'] = "6.66, , 0, 5",
+function startWork()
+  local work = {
+    ['central-market'] = startCm,
+    ['stoke'] = startStoke
   }
-  local choice = getChoice(positions);
-  setWindowPosition(positions[choice]);
+  local choice = getChoice(work);
+  work[choice]();
+end
+
+function startCm()
+  hs.alert.show('starting cm');
+end
+
+function startStoke()
+  hs.application.launchOrFocus('Brave Browser');
+  setWindowPosition(windowPositions['top-left']);
+
+  hs.application.launchOrFocus('Mail');
+  setWindowPosition(windowPositions['bottorm-right']);
+
+  hs.application.launchOrFocus('Slack');
+  setWindowPosition(windowPositions['bottom-middle']);
+
+  hs.application.launchOrFocus('iTerm');
+  setWindowPosition(windowPositions['top-middle']);
+  focusEditor();
+end
+
+function positionWindow()
+  local choice = getChoice(windowPositions);
+  setWindowPosition(windowPositions[choice]);
 end
 
 function spanWindow(dimension)
@@ -157,8 +187,7 @@ end
 
 function focusEditor()
   hs.layout.apply({
-    {"Brave Browser", nil, nil, {x = 0, y = 0, w = 0.4, h = 1}, nil, nil},
-    {"iTerm2", nil, nil, {x = 0.4, y = 0, w = 0.6, h = 0.6}, nil, nil},
+    {"iTerm2", nil, nil, {x = 0.333, y = 0, w = (1 - 0.333), h = 0.6}, nil, nil},
   })
 end
 

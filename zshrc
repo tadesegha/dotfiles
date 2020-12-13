@@ -50,11 +50,13 @@ alias rebase='git fetch origin && git rebase origin/develop'
 # git functions
 function merge {
   if [ $# -eq 0 ]; then
-    echo "commit message required"
-    return
+    msg=$(g l -n 1 --oneline | cut -d " " -f 2-)
+    echo "using last commit message: $msg"
+  else
+    msg=$1
   fi
 
-  rebase && yarn test && git -c advice.detachedHead=false checkout origin/develop && git merge --squash - && git commit -m $1 && git push origin HEAD:develop && git branch -f @{-1} && git checkout - && yarn lint
+  rebase && yarn test && git -c advice.detachedHead=false checkout origin/develop && git merge --squash - && git commit -m $msg && git push origin HEAD:develop && git branch -f @{-1} && git checkout - && yarn lint
 }
 
 # Load Git completion

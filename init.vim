@@ -45,6 +45,7 @@ set updatetime=300
 set linespace=7
 set timeoutlen=300
 set guicursor=
+set wildignore+=*/node_modules/*
 syntax on
 
 " highlight PMenu ctermbg=black ctermfg=white
