@@ -27,6 +27,10 @@ let $FZF_DEFAULT_COMMAND = 'rga --files --glob "!*node_modules/*" --glob "!*bin/
 let mapleader = '-'
 let maplocalleader = ','
 
+" ultisnips settings
+let g:UltiSnipsJumpForwardTrigger = '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
+
 set autoindent
 set expandtab
 set hidden

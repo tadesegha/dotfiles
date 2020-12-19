@@ -14,6 +14,8 @@ alias dpl='docker pull'
 alias dcsa='docker container stop $(docker container ls -q)'
 alias dcra='docker container rm $(docker container ls -aq)'
 alias dira='docker image rm $(docker image ls -a)'
+alias docker-start='docker-machine start && eval $(docker-machine env)'
+alias docker-stop='docker-machine stop'
 
 # docker-compose aliases
 alias dcd='docker-command docker-compose $([[ -f docker-compose-local.yml ]] && echo "-f docker-compose-local.yml") down'
@@ -56,7 +58,7 @@ function merge {
     msg=$1
   fi
 
-  rebase && yarn test && git -c advice.detachedHead=false checkout origin/develop && git merge --squash - && git commit -m $msg && git push origin HEAD:develop && git branch -f @{-1} && git checkout - && yarn lint
+  rebase && yarn lint && yarn test && git -c advice.detachedHead=false checkout origin/develop && git merge --squash - && git commit -m $msg && git push origin HEAD:develop && git branch -f @{-1} && git checkout -
 }
 
 # Load Git completion
@@ -65,3 +67,14 @@ fpath=(~/.zsh $fpath)
 
 autoload creds
 autoload -Uz compinit && compinit
+
+# miscellaneous
+function convert-screen-recording {
+  if [ $# -eq 0 ]; then
+    echo input file required
+    return
+  fi
+
+  input=$1
+  ffmpeg -i ${input} -vcodec h264 -acodec aac ${input/%.mov/.mp4}
+}

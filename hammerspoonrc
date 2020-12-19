@@ -24,7 +24,7 @@ function userCommands()
     ['get-password'] = getPassword,
     ['reload'] = reload,
     ['open-bookmark'] = openBookmark,
-    ['start-work'] = startWork
+    ['start-work'] = startWork,
   }
   performCommand(commands)
 end
@@ -49,7 +49,8 @@ end
 function openBookmark()
   local bookmarks = {
     ['stoke-wireframe'] = 'https://xd.adobe.com/view/14581303-8c3c-481b-87f4-ca25f70f9ed0-410b/screen/4cb672de-328b-4e50-8d31-366106fd0989',
-    ['cm-gql'] = 'https://cm-graphql-service-dot-heb-cm-dev1.uc.r.appspot.com/'
+    ['cm-gql'] = 'https://cm-graphql-service-dot-heb-cm-dev1.uc.r.appspot.com/',
+    ['cm-figma-jv'] = "https://www.figma.com/file/1SMwfAg40kn9aWNTxwIH5T/Joe-V's?node-id=1062%3A18471"
   }
 
   local _, action = getChoice(bookmarks);
@@ -57,29 +58,19 @@ function openBookmark()
 end
 
 function startWork()
-  local work = {
-    ['central-market'] = startCm,
-    ['stoke'] = startStoke
-  }
-  local choice = getChoice(work);
-  work[choice]();
-end
-
-function startCm()
-  hs.alert.show('starting cm');
-end
-
-function startStoke()
-  hs.application.launchOrFocus('Brave Browser');
+  hs.application.open('org.mozilla.firefoxdeveloperedition', 5, true);
   setWindowPosition(windowPositions['top-left']);
 
-  hs.application.launchOrFocus('Mail');
-  setWindowPosition(windowPositions['bottorm-right']);
+  hs.application.open('com.apple.mail', 5, true);
+  setWindowPosition(windowPositions['bottom-right']);
 
-  hs.application.launchOrFocus('Slack');
+  hs.application.open('com.apple.iCal', 5, true);
+  setWindowPosition(windowPositions['bottom-left']);
+
+  hs.application.open('com.tinyspeck.slackmacgap', 5, true);
   setWindowPosition(windowPositions['bottom-middle']);
 
-  hs.application.launchOrFocus('iTerm');
+  hs.application.open('com.googlecode.iterm2', 2, true);
   setWindowPosition(windowPositions['top-middle']);
   focusEditor();
 end
@@ -187,7 +178,7 @@ end
 
 function focusEditor()
   hs.layout.apply({
-    {"iTerm2", nil, nil, {x = 0.333, y = 0, w = (1 - 0.333), h = 0.6}, nil, nil},
+    {"com.googlecode.iterm2", nil, nil, {x = 0.333, y = 0, w = (1 - 0.333), h = 0.6}, nil, nil},
   })
 end
 
