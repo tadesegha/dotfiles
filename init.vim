@@ -17,7 +17,6 @@ call plug#begin(stdpath('data') . '/plugged')
 	Plug 'peitalin/vim-jsx-typescript'
 	Plug 'vim-scripts/BufClose.vim'
 	Plug 'sirver/ultisnips'
-  Plug 'ParamagicDev/vim-medic_chalk'
 call plug#end()
 
 " fzf settings
@@ -53,7 +52,6 @@ set wildignore+=*/node_modules/*
 syntax on
 
 " highlight PMenu ctermbg=black ctermfg=white
-colorscheme medic_chalk
 
 nmap <leader><leader> <c-^>
 nmap <leader><space> :Buffers<cr>
