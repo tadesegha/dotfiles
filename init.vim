@@ -57,7 +57,7 @@ nmap <leader><leader> <c-^>
 nmap <leader><space> :Buffers<cr>
 nmap <leader>e :Files<cr>
 nmap <leader>t :call <SID>GoToShell()<cr>
-nmap <leader>vc :e $MYVIMRC<cr>
+nmap <leader>rc :e $MYVIMRC<cr>
 nmap <space> :
 nmap <leader>rt :call RunInTerminal("jest-tests", "watch-tests")<cr>
 nmap <leader>rd :call RunInTerminal("dev-server", "run-dev")<cr>
@@ -81,7 +81,7 @@ augroup Terminal
 augroup end
 
 " coc settings
-let g:coc_global_extensions = ['coc-json', 'coc-html', 'coc-prettier']
+let g:coc_global_extensions = ['coc-json', 'coc-html', 'coc-prettier', 'coc-tsserver']
 nmap <localleader>d <Plug>(coc-definition)
 nmap <localleader>i <Plug>(coc-implementation)
 nmap <localleader>u <Plug>(coc-references)
