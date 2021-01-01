@@ -96,6 +96,7 @@ augroup Coc
   autocmd!
   autocmd BufWritePre *.js,*.jsx,*.tsx,*.ts,*.html :call CocAction('format')
   autocmd BufEnter *.js,*.jsx,*.tsx,*.ts,*.html :call s:TabsAndSpaces()
+  autocmd BufEnter *.tsx,*.ts :UltiSnipsAddFiletypes javascript
 augroup end
 
 augroup TloCustom

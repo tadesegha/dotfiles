@@ -33,8 +33,7 @@ function merge {
   has_linter=$(yarn run 2> /dev/null | grep -q '\- lint'; echo $?)
   if [[ $skip_lint != true ]] && [[ $has_linter == "0" ]]; then
     yarn lint
-    if [ $? ] && [[ $skip_lint != true ]]; then
-      echo 'returning because linting failed'
+    if [[ $? != "0" ]] && [[ $skip_lint != true ]]; then
       return
     fi
   fi
