@@ -15,5 +15,5 @@ function convert-screen-recording {
   ffmpeg -i ${input} -vcodec h264 -acodec aac ${input/%.mov/.mp4}
 }
 
-currDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-source $currDir/bash/git
+currDir=$(cd $(dirname "${BASH_SOURCE[0]}") >/dev/null 2>&1 && pwd)
+source $currDir/dotfiles/bash/git
