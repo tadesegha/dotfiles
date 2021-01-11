@@ -1,0 +1,83 @@
+snippet ed "export default"
+export default ${0:functionName};
+endsnippet
+
+snippet f "function"
+const ${1:functionName} = (${2}) => {
+	${0:throw Error('not yet implemented');}
+}
+endsnippet
+
+snippet jd "jest describe"
+describe("${1:when doing something}", () => {
+	test("${2:should expect something to happen}", () => {
+		${3:expect(true).toBe(false);}$0
+	});
+});
+endsnippet
+
+snippet jt "jest test"
+test("${1:should}", () => {
+	${0:expect(true).toBe(false);}
+});
+endsnippet
+
+snippet l "log"
+console.log(${1});${0}
+endsnippet
+
+snippet c "constant variable"
+const ${1:name} = ${0:value};
+endsnippet
+
+snippet id "import default"
+import ${1:functionName} from '${2:path}';
+endsnippet
+
+snippet i "import"
+import { ${1:functionName} } from '${2:path}';
+endsnippet
+
+snippet e "export"
+export { ${0} };
+endsnippet
+
+
+
+snippet ef "export function"
+export const ${1:functionName} = () => {
+	${0:throw Error('not yet implemented');}
+}
+endsnippet
+
+snippet efe "export function expression"
+export const ${1:functionName} = () => ${0:{ throw Error('not yet implemented'); }}
+endsnippet
+
+snippet edfe "export default function expression"
+export default () => ${0:{ throw Error('not yet implemented'); }}
+endsnippet
+
+snippet aaf "async function"
+const ${1:functionName} = async () => {
+	${0:throw Error('not yet implemented');}
+}
+endsnippet
+
+snippet fe "function expression"
+const ${1:functionName} = () => ${0:null};
+endsnippet
+
+snippet af "anonymous function"
+() => {
+	${0:throw Error('not yet implemented');}
+}
+endsnippet
+
+snippet afe "anonymous function expression"
+() => ${0:throw Error('not yet implemented')};
+endsnippet
+
+snippet jrm "reset mocks"
+beforeEach(() => jest.resetAllMocks());
+endsnippet

@@ -44,7 +44,9 @@ function merge {
   remote_name=${components[0]}
   remote_branch_name=${components[1]}
 
-  yarn test && \
+  timedatectl set-timezone 'Africa/Lagos' && \
+    yarn test && \
+    timedatectl set-timezone 'America/Edmonton' && \
     git -c advice.detachedHead=false checkout $remote_branch && \
     git merge --squash - && \
     git commit -m "$msg" && \
