@@ -49,9 +49,8 @@ set linespace=7
 set timeoutlen=300
 set guicursor=
 set wildignore+=*/node_modules/*
+set termguicolors
 syntax on
-
-" highlight PMenu ctermbg=black ctermfg=white
 
 nmap <leader><leader> <c-^>
 nmap <leader><space> :Buffers<cr>
@@ -224,3 +223,5 @@ source ~/tools/neovim/centralmarket.vim
 source ~/tools/neovim/stoke.vim
 source ~/tools/neovim/ulo.vim
 source ~/tools/neovim/git.vim
+
+source ~/.config/nvim/colorscheme/solarized.vim
