@@ -184,4 +184,5 @@ bar {
         status_command i3status
 }
 
-bindsym $mod+t exec ~/tools/scripts/bash-gui.sh
+# bindsym $mod+t exec ~/tools/scripts/bash-gui.sh
+bindsym $mod+t exec ~/tools/scripts/i3-commands.sh
