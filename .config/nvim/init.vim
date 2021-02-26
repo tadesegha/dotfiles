@@ -50,6 +50,7 @@ set timeoutlen=300
 set guicursor=
 set wildignore+=*/node_modules/*
 set termguicolors
+set splitright
 syntax on
 
 nmap <leader><leader> <c-^>
