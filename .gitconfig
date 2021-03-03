@@ -27,6 +27,7 @@
   rs = reset
   rv = revert
   s = status
+  sw = switch
 [gpg]
 	program = gpg2
 [pull]
