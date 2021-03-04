@@ -2,7 +2,7 @@
 alias g=git
 
 # bash completion
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+source ~/dotfiles/bash/git_completion.sh
 
 # scripts
 PATH=$PATH:~/tools/scripts/git
