@@ -110,9 +110,9 @@ augroup TloCustom
 	autocmd BufEnter *.scss,*.css :call s:InitCodeFile()
 augroup end
 
-augroup TxtFiles
+augroup MdFiles
 	autocmd!
-	autocmd BufEnter *.txt nmap <buffer> <localleader>- r<c-v>u2713
+	autocmd BufEnter *.md nmap <buffer> <localleader>- r<c-v>u2713
 augroup end
 
 augroup VimConfig
@@ -122,14 +122,10 @@ augroup end
 
 command! -nargs=1 -complete=dir NewWorkspace call s:NewWorkspace("<args>")
 command! -nargs=1 Workspace call s:Workspace("<args>")
-command! Dev call s:Dev()
 command! -nargs=? Bd :BufClose <args>
-command! FormatJson %! python -m json.tool
-command! -nargs=1 Notes :e ~/OneDrive - adesegha/notes/<args>.txt
-command! Todo :e ~/OneDrive - adesegha/notes/todo.txt
-command! Inbox :e ~/OneDrive - adesegha/notes/inbox.txt
-command! Auto :e ~/OneDrive - adesegha/notes/automation.txt
-command! Quit call s:Quit()
+command! Dev call s:Dev()
+command! Notes edit ~/notes/inbox.txt
+command! Todo edit ~/notes/todo.txt
 
 function! s:GoToShell()
 	if bufexists('shell')
@@ -218,10 +214,6 @@ function! s:StartShell()
     terminal
     file shell
   endif
-endfunction
-
-function! s:Quit()
-  bufdo bd
 endfunction
 
 source ~/tools/neovim/utilities.vim
